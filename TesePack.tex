@@ -1,0 +1,45 @@
+\usepackage{layout}
+\setlength{\textwidth}{15.0 cm}
+\setlength{\textheight}{25.0 cm}
+
+\usepackage[english,brazil]{babel}
+\usepackage{pagina}         % pacote de página padrão da Poli
+\usepackage{indentfirst}    % indenta primeiro parágrafo
+\usepackage[utf8]{inputenc} % UTF-8 para Overleaf (original era latin1)
+\usepackage[T1]{fontenc}
+
+\usepackage{graphicx}
+\graphicspath{{./figuras/}}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+
+\usepackage{multirow}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{enumerate}
+
+% Hyperlinks (sem molduras coloridas)
+\usepackage[hidelinks]{hyperref}
+
+% Código-fonte Julia / Python
+\usepackage{listings}
+\usepackage[dvipsnames]{xcolor}
+\lstset{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  numbers=left,
+  numberstyle=\tiny,
+  keywordstyle=\bfseries\color{MidnightBlue},
+  commentstyle=\itshape\color{Gray},
+  stringstyle=\color{BrickRed},
+}
+
+% Algoritmos
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\setcounter{secnumdepth}{3}   % numeração até subsubseção
+\setcounter{tocdepth}{2}      % sumário até subseção

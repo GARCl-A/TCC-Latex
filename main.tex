@@ -1,0 +1,82 @@
+\documentclass[a4paper,12pt,oneside,openany]{book}
+\input{TesePack}
+
+\begin{document}
+
+\frontmatter
+\thispagestyle{empty}
+
+% --- Capa e Folha de Rosto ---
+\input{Capa}
+
+\pagebreak
+
+% --- Declaração, Copyright, Dedicatória, Agradecimento, Resumo, Abstract, Siglas ---
+\input{Preambulo}
+
+% --- Sumário ---
+\tableofcontents
+
+% --- Lista de Figuras ---
+\listoffigures
+
+% --- Lista de Tabelas ---
+\listoftables
+
+\mainmatter
+\cleardoublepage
+
+% ---------------------------------------------------------------
+% Capítulo 1 — Introdução
+% ---------------------------------------------------------------
+\chapter{Introdu\c{c}\~ao}
+\label{cap:introducao}
+\input{capitulos/introducao/introducao}
+
+% ---------------------------------------------------------------
+% Capítulo 2 — Revisão Bibliográfica
+% ---------------------------------------------------------------
+\chapter{Revis\~ao Bibliogr\'afica}
+\label{cap:revisao}
+\input{capitulos/revisao/revisao}
+
+% ---------------------------------------------------------------
+% Capítulo 3 — Modelagem Matemática
+% ---------------------------------------------------------------
+\chapter{Modelagem Matem\'atica}
+\label{cap:modelagem}
+\input{capitulos/modelagem/modelagem}
+
+% ---------------------------------------------------------------
+% Capítulo 4 — Implementação Computacional
+% ---------------------------------------------------------------
+\chapter{Implementa\c{c}\~ao Computacional}
+\label{cap:implementacao}
+\input{capitulos/implementacao/implementacao}
+
+% ---------------------------------------------------------------
+% Capítulo 5 — Experimentos Computacionais
+% ---------------------------------------------------------------
+\chapter{Experimentos Computacionais}
+\label{cap:experimentos}
+\input{capitulos/experimentos/experimentos}
+
+% ---------------------------------------------------------------
+% Capítulo 6 — Conclusão
+% ---------------------------------------------------------------
+\chapter{Conclus\~ao}
+\label{cap:conclusao}
+\input{capitulos/conclusao/conclusao}
+
+% ---------------------------------------------------------------
+% Bibliografia
+% ---------------------------------------------------------------
+\normalsize
+\cleardoublepage
+\addcontentsline{toc}{chapter}{Bibliografia}
+\bibliographystyle{coppe}
+\bibliography{referencias}
+
+\backmatter
+
+\end{document}
