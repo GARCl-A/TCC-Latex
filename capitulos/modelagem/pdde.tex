@@ -13,13 +13,64 @@ A PDDE opera sobre um \emph{grafo de pol\'itica} (\textit{policy graph}), que \'
   \item \textbf{N\'os de liquida\c{c}\~ao} $(t, c)$, um para cada cen\'ario $c$ do m\^es: ap\'os a decis\~ao, ocorre a transi\c{c}\~ao probabil\'istica para um dos n\'os de liquida\c{c}\~ao, onde se revelam o PLD e a gera\c{c}\~ao f\'isica e apura-se o resultado financeiro do est\'agio.
 \end{enumerate}
 
-Essa separa\c{c}\~ao entre o momento de decis\~ao e o momento de realiza\c{c}\~ao das incertezas incorpora naturalmente a n\~ao antecipatividade na pr\'opria estrutura do modelo, sem necessidade de restri\c{c}\~oes expl\'icitas como na formula\c{c}\~ao DEQ. A Figura~\ref{fig:policy_graph} ilustra essa estrutura para um horizonte de tr\^es meses com tr\^es cen\'arios por est\'agio.
+Essa separa\c{c}\~ao entre o momento de decis\~ao e o momento de realiza\c{c}\~ao das incertezas incorpora naturalmente a n\~ao antecipatividade na pr\'opria estrutura do modelo, sem necessidade de restri\c{c}\~oes expl\'icitas como na formula\c{c}\~ao DEQ. A Figura~\ref{fig:policy_graph_pdde} ilustra essa estrutura para um horizonte de tr\^es meses com tr\^es cen\'arios por est\'agio.
 
 \begin{figure}[H]
-  \centering
-  % Substituir pelo gráfico da implementação quando disponível
-  \caption{Estrutura do grafo de pol\'itica utilizado na PDDE: em cada m\^es, a decis\~ao de contrata\c{c}\~ao \'e tomada antes da realiza\c{c}\~ao do cen\'ario, e a liquida\c{c}\~ao ocorre ap\'os a revela\c{c}\~ao das incertezas.}
-  \label{fig:policy_graph}
+    \centering
+    \begin{tikzpicture}[
+        dec/.style={rectangle, rounded corners, draw=black, thick, minimum width=1.8cm, minimum height=0.8cm, fill=blue!8},
+        scen/.style={circle, draw=black, thick, minimum size=0.8cm, fill=gray!12},
+        edge/.style={->, thick, >=stealth},
+        font=\small
+    ]
+
+    % Nós de decisão
+    \node[dec] (d1) at (0,0) {$(1,0)$};
+    \node[dec] (d2) at (5,0) {$(2,0)$};
+    \node[dec] (d3) at (10,0) {$(3,0)$};
+
+    % Cenários do mês 1
+    \node[scen] (s11) at (1.8,1.3) {$(1,1)$};
+    \node[scen] (s12) at (1.8,0) {$(1,2)$};
+    \node[scen] (s13) at (1.8,-1.3) {$(1,3)$};
+
+    % Cenários do mês 2
+    \node[scen] (s21) at (6.8,1.3) {$(2,1)$};
+    \node[scen] (s22) at (6.8,0) {$(2,2)$};
+    \node[scen] (s23) at (6.8,-1.3) {$(2,3)$};
+
+    % Setas mês 1
+    \draw[edge] (d1) -- (s11);
+    \draw[edge] (d1) -- (s12);
+    \draw[edge] (d1) -- (s13);
+
+    \draw[edge] (s11) -- (d2);
+    \draw[edge] (s12) -- (d2);
+    \draw[edge] (s13) -- (d2);
+
+    % Setas mês 2
+    \draw[edge] (d2) -- (s21);
+    \draw[edge] (d2) -- (s22);
+    \draw[edge] (d2) -- (s23);
+
+    \draw[edge] (s21) -- (d3);
+    \draw[edge] (s22) -- (d3);
+    \draw[edge] (s23) -- (d3);
+
+    % Legendas
+    \node[align=center] at (0,-2.1) {\footnotesize n\'o de decis\~ao\\\footnotesize escolhe $q_t^B,q_t^S$};
+    \node[align=center] at (1.8,-3.2) {\footnotesize n\'os de liquida\c{c}\~ao\\\footnotesize observa $\omega_t=(P_t,G_t)$};
+    \node[align=center] at (5,-2.1) {\footnotesize pr\'oximo est\'agio\\\footnotesize estado atualizado};
+
+    % Títulos dos estágios
+    \node at (0,2.2) {\textbf{M\^es 1}};
+    \node at (5,2.2) {\textbf{M\^es 2}};
+    \node at (10,2.2) {\textbf{M\^es 3}};
+
+    \end{tikzpicture}
+    \caption{Estrutura do \textit{policy graph} utilizado na PDDE: em cada m\^es, a decis\~ao de contrata\c{c}\~ao \'e tomada antes da realiza\c{c}\~ao do cen\'ario, e a liquida\c{c}\~ao ocorre ap\'os a revela\c{c}\~ao das incertezas.}
+    \label{fig:policy_graph_pdde}
+    \vspace{-5mm}
 \end{figure}
 
 \subsection{Vetor de Estado e Equa\c{c}\~ao de Transi\c{c}\~ao}
