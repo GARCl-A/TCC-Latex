@@ -1,2 +1,50 @@
-% TODO: notacao
-\section{TODO}
+\section{Nota\c{c}\~ao: Conjuntos, Par\^ametros e Vari\'aveis}
+\label{sec:notacao}
+
+Esta se\c{c}\~ao introduz a nota\c{c}\~ao utilizada na formula\c{c}\~ao do problema. A incerteza \'e representada por uma \'arvore de cen\'arios modelada como um grafo dirigido ac\'iclico $\mathcal{T} = (\mathcal{N}, \mathcal{A})$, onde $\mathcal{N}$ \'e o conjunto finito de n\'os e $\mathcal{A} \subset \mathcal{N} \times \mathcal{N}$ o conjunto de arcos que conectam cada n\'o aos seus sucessores. A \'arvore origina-se em um \'unico n\'o raiz $n_0 \in \mathcal{N}$. Cada n\'o $n \in \mathcal{N} \setminus \{n_0\}$ possui exatamente um predecessor, denotado por $a(n)$. Define-se $\mathcal{L} \subset \mathcal{N}$ como o subconjunto de n\'os folha, correspondentes ao \'ultimo est\'agio do horizonte de planejamento.
+
+\subsection*{Conjuntos e \'Indices}
+
+\begin{itemize}
+  \item $\mathcal{S}$: conjunto de submercados do SIN, indexados por $s$ (SE/CO, S, NE, N).
+  \item $\mathcal{N}$: conjunto de n\'os da \'arvore de cen\'arios.
+  \item $\mathcal{L} \subset \mathcal{N}$: subconjunto de n\'os folha.
+  \item $\mathcal{I}$: conjunto de contratos dispon\'iveis para negocia\c{c}\~ao.
+  \item $\mathcal{I}_n \subseteq \mathcal{I}$: subconjunto de contratos cujo m\^es de in\'icio coincide com o n\'o $n$.
+\end{itemize}
+
+\subsection*{Par\^ametros}
+
+\begin{itemize}
+  \item $P_{s,n}$ (R\$/MWh): Pre\c{c}o de Liquida\c{c}\~ao das Diferen\c{c}as no submercado $s$ e n\'o $n$.
+  \item $G_{s,n}$ (MWm\'edio): gera\c{c}\~ao f\'isica consolidada no submercado $s$ e n\'o $n$.
+  \item $\pi_n$: probabilidade incondicional do n\'o $n$.
+  \item $h_n$: n\'umero de horas do m\^es correspondente ao n\'o $n$.
+  \item $C_{\text{inicial}}$ (R\$): saldo de caixa inicial da comercializadora.
+  \item $L^{\text{cred}}$ (R\$): limite m\'inimo de caixa (restri\c{c}\~ao de cr\'edito).
+  \item $M$: par\^ametro de penaliza\c{c}\~ao associado \`a viola\c{c}\~ao do limite de cr\'edito.
+  \item $D_{\max}$: dura\c{c}\~ao m\'axima admitida nos contratos do portf\'olio (em meses).
+  \item $V^{0B}_{s,n}$, $V^{0S}_{s,n}$ (MWm): volumes de compra e venda da carteira legada no submercado $s$ e n\'o $n$.
+  \item $K^{0B}_{s,n}$, $K^{0S}_{s,n}$ (R\$/MWh): pre\c{c}os m\'edios da carteira legada.
+  \item $\bar{q}^B_i$, $\bar{q}^S_i$ (MWm): limites m\'aximos de compra e venda no contrato $i$.
+  \item $K^B_i$, $K^S_i$ (R\$/MWh): pre\c{c}os fixos de compra e venda do contrato $i$.
+  \item $d_i$ (meses): dura\c{c}\~ao do contrato $i$.
+  \item $s_i \in \mathcal{S}$: submercado do contrato $i$.
+  \item $R^{\text{leg}}_n$ (R\$): resultado financeiro da carteira legada no n\'o $n$.
+\end{itemize}
+
+\subsection*{Vari\'aveis de Estado}
+
+\begin{itemize}
+  \item $v_{s,k,n}$ (MWm): posi\c{c}\~ao f\'isica l\'iquida da carteira no submercado $s$, n\'o $n$, associada aos contratos com $k$ meses remanescentes de vig\^encia.
+  \item $c_{s,k,n}$ (R\$/h): posi\c{c}\~ao financeira l\'iquida associada aos contratos vigentes no submercado $s$, n\'o $n$, com $k$ meses remanescentes.
+  \item $x_n$ (R\$): saldo de caixa acumulado da comercializadora no n\'o $n$.
+\end{itemize}
+
+\subsection*{Vari\'aveis de Decis\~ao}
+
+\begin{itemize}
+  \item $q^B_i \geq 0$ (MWm): volume de energia a ser comprado no contrato $i$.
+  \item $q^S_i \geq 0$ (MWm): volume de energia a ser vendido no contrato $i$.
+  \item $\delta_n \geq 0$: vari\'avel de folga associada \`a restri\c{c}\~ao de cr\'edito no n\'o $n$.
+\end{itemize}

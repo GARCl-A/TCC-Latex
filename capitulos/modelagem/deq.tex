@@ -1,2 +1,94 @@
-% TODO: deq
-\section{TODO}
+\section{Formula\c{c}\~ao Determin\'istica Equivalente}
+\label{sec:deq}
+
+Na Formula\c{c}\~ao Determin\'istica Equivalente (DEQ), o problema estoc\'astico multiestágio \'e representado explicitamente sobre a \'arvore de cen\'arios. Cada n\'o $n \in \mathcal{N}$ corresponde a um estado poss\'ivel do sistema em determinado est\'agio, incorporando o hist\'orico de realiza\c{c}\~oes das incertezas at\'e aquele ponto. As decis\~oes de contrata\c{c}\~ao s\~ao, portanto, indexadas por n\'o, e a estrutura de n\~ao antecipatividade \'e imposta explicitamente por meio de restri\c{c}\~oes de igualdade entre n\'os irm\~aos.
+
+\subsection{N\~ao Antecipatividade}
+\label{subsec:nao_antecipatividade}
+
+Para garantir que a comercializadora n\~ao utilize informa\c{c}\~ao futura em suas decis\~oes, imp\~oe-se que os volumes negociados sejam id\^enticos para todos os n\'os que compartilham o mesmo predecessor. Para cada contrato $i \in \mathcal{I}$:
+%
+\begin{equation}
+  q^B_{i,m} = q^B_{i,n} \quad \text{e} \quad q^S_{i,m} = q^S_{i,n},
+  \qquad \forall\, m, n \in \mathcal{N} \mid a(m) = a(n).
+  \label{eq:nao_antecipatividade}
+\end{equation}
+
+Os volumes respeitam os limites de lote ($0 \leq q^B_{i,n} \leq \bar{q}^B_i$) e s\~ao nulos quando o n\'o n\~ao pertence ao m\^es de in\'icio do contrato ($q^B_{i,n} = 0$, $\forall\, i \notin \mathcal{I}_n$). O racioc\'inio \'e id\^entico para $q^S_{i,n}$.
+
+\subsection{Din\^amica do Portf\'olio}
+\label{subsec:dinamica_portfolio}
+
+Contratos com dura\c{c}\~ao superior a um m\^es geram efeitos financeiros e f\'isicos ao longo de v\'arios est\'agios. O \'indice $k$ representa o n\'umero de meses remanescentes de vig\^encia de um contrato. A evolu\c{c}\~ao da posi\c{c}\~ao f\'isica l\'iquida $v_{s,k,n}$ \'e dada por:
+%
+\begin{align}
+  v_{s,k,n} &= v_{s,k+1,a(n)} + \sum_{\substack{i \in \mathcal{I}_n \\ d_i > k,\; s_i = s}}
+  \!\bigl(q^B_{i,n} - q^S_{i,n}\bigr),
+  &\forall\, s \in \mathcal{S},\; n \in \mathcal{N} \setminus \{n_0\},\; k < D_{\max},
+  \label{eq:volume_fisico} \\[4pt]
+  v_{s,D_{\max},n} &= \sum_{\substack{i \in \mathcal{I}_n \\ d_i > D_{\max},\; s_i = s}}
+  \!\bigl(q^B_{i,n} - q^S_{i,n}\bigr),
+  &\forall\, s \in \mathcal{S},\; n \in \mathcal{N} \setminus \{n_0\}.
+  \label{eq:volume_fisico_max}
+\end{align}
+
+De forma an\'aloga, a posi\c{c}\~ao financeira l\'iquida $c_{s,k,n}$ evolui segundo:
+%
+\begin{align}
+  c_{s,k,n} &= c_{s,k+1,a(n)} + \sum_{\substack{i \in \mathcal{I}_n \\ d_i > k,\; s_i = s}}
+  \!\bigl(q^S_{i,n} K^S_i - q^B_{i,n} K^B_i\bigr),
+  &\forall\, s \in \mathcal{S},\; n \in \mathcal{N} \setminus \{n_0\},\; k < D_{\max},
+  \label{eq:posicao_financeira} \\[4pt]
+  c_{s,D_{\max},n} &= \sum_{\substack{i \in \mathcal{I}_n \\ d_i > D_{\max},\; s_i = s}}
+  \!\bigl(q^S_{i,n} K^S_i - q^B_{i,n} K^B_i\bigr),
+  &\forall\, s \in \mathcal{S},\; n \in \mathcal{N} \setminus \{n_0\}.
+  \label{eq:posicao_financeira_max}
+\end{align}
+
+\subsection{Exposi\c{c}\~ao ao Mercado de Curto Prazo}
+\label{subsec:exposicao}
+
+Ap\'os a realiza\c{c}\~ao das incertezas no n\'o $n$, calcula-se a exposi\c{c}\~ao da comercializadora ao mercado de curto prazo. A vari\'avel $E_{s,n}$ consolida a gera\c{c}\~ao realizada, a carteira legada e os contratos vigentes:
+%
+\begin{equation}
+  E_{s,n} = G_{s,n} + V^{0B}_{s,n} - V^{0S}_{s,n}
+  + \sum_{\substack{i \in \mathcal{I}_n \\ s_i = s}} \!\bigl(q^B_{i,n} - q^S_{i,n}\bigr)
+  + v_{s,1,a(n)},
+  \qquad \forall\, s \in \mathcal{S},\; n \in \mathcal{N} \setminus \{n_0\}.
+  \label{eq:exposicao}
+\end{equation}
+
+\subsection{Equa\c{c}\~ao de Transi\c{c}\~ao de Caixa}
+\label{subsec:transicao_caixa}
+
+O saldo de caixa $x_n$ agrega o saldo herdado do predecessor, o resultado da carteira legada, o fluxo dos novos contratos, o fluxo dos contratos j\'a vigentes herdados, e a liquida\c{c}\~ao da exposi\c{c}\~ao ao PLD:
+%
+\begin{equation}
+  x_n = x_{a(n)} + R^{\text{leg}}_n
+  + \left[\sum_{i \in \mathcal{I}_n}\!\bigl(q^S_{i,n} K^S_i - q^B_{i,n} K^B_i\bigr)
+  + \sum_{s \in \mathcal{S}} c_{s,1,a(n)}\right] h_n
+  + \sum_{s \in \mathcal{S}} E_{s,n}\, P_{s,n}\, h_n,
+  \label{eq:transicao_caixa}
+\end{equation}
+%
+para todo $n \in \mathcal{N} \setminus \{n_0\}$.
+
+A restri\c{c}\~ao de cr\'edito \'e imposta de forma el\'astica por meio de uma vari\'avel de folga $\delta_n \geq 0$, preservando a factibilidade do problema:
+%
+\begin{equation}
+  x_n + \delta_n \geq L^{\text{cred}}, \qquad \forall\, n \in \mathcal{N} \setminus \{n_0\}.
+  \label{eq:restricao_credito}
+\end{equation}
+
+\subsection{Fun\c{c}\~ao Objetivo}
+\label{subsec:objetivo_deq}
+
+O modelo maximiza o resultado financeiro esperado ao final do horizonte, descontando penalidades associadas \`as viola\c{c}\~oes do limite de cr\'edito:
+%
+\begin{equation}
+  \max \quad \sum_{n \in \mathcal{L}} \pi_n\, x_n
+  \;-\; M \sum_{n \in \mathcal{N} \setminus \{n_0\}} \pi_n\, \delta_n.
+  \label{eq:objetivo_deq}
+\end{equation}
+
+A formula\c{c}\~ao resultante \'e um problema de programa\c{c}\~ao linear (PL) cujo porte cresce com o n\'umero de n\'os da \'arvore de cen\'arios. Para $R$ ramos por est\'agio e $T$ est\'agios, o n\'umero de n\'os \'e da ordem de $O(R^T)$, o que torna a abordagem computacionalmente invi\'avel para inst\^ancias de maior dimens\~ao, como demonstrado nos experimentos do Cap\'itulo~\ref{cap:experimentos}.
