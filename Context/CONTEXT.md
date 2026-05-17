@@ -174,7 +174,7 @@ main.tex
 | Capítulo | Status |
 |---|---|
 | Cap. 1 — Introdução | stub (TODO) |
-| Cap. 2 — Revisão Bibliográfica | stub (TODO) |
+| Cap. 2 — Revisão Bibliográfica | **COMPLETO** |
 | Cap. 3 — Modelagem Matemática | **COMPLETO** |
 | Cap. 4 — Implementação | stub (TODO) |
 | Cap. 5 — Experimentos | stub (TODO) |

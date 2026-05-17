@@ -1,2 +1,9 @@
-% TODO: prog_estocastica
-\section{TODO}
+\subsection*{Conceitos Fundamentais}
+
+A Programação Estocástica (PE) é uma área da otimização matemática que lida com problemas de decisão sob incerteza, onde alguns parâmetros do modelo são variáveis aleatórias. Diferentemente da programação determinística, que assume que todos os dados são conhecidos com certeza, a PE busca soluções que são robustas a diferentes realizações das incertezas. A abordagem mais comum envolve a modelagem da incerteza através de cenários discretos, com probabilidades associadas, formando uma árvore ou um grafo de cenários que representa a evolução temporal das variáveis aleatórias (Birge e Louveaux, 2011).
+
+\subsection*{Programação Estocástica Multiestágio}
+
+Em muitos problemas práticos, as decisões são tomadas sequencialmente ao longo do tempo, e as incertezas se revelam gradualmente. Esse tipo de problema é modelado pela Programação Estocástica Multiestágio (PEM), onde as decisões em cada estágio dependem das informações disponíveis até aquele momento. A característica fundamental da PEM é a não antecipatividade, que garante que as decisões tomadas em um determinado estágio não podem ser influenciadas por informações futuras que ainda não foram reveladas. Isso reflete a realidade da tomada de decisão em tempo real, onde não se tem acesso ao futuro completo (Shapiro, Dentcheva e Ruszczyński, 2009).
+
+Problemas de PEM podem ser formulados como problemas de otimização de larga escala, especialmente quando o número de estágios e cenários é grande. A representação explícita de todos os cenários pode levar a um problema determinístico equivalente (DEQ) com um número proibitivo de variáveis e restrições. Para contornar essa dificuldade, técnicas de decomposição são frequentemente empregadas, explorando a estrutura temporal do problema para resolvê-lo em etapas menores e interconectadas. Isso é particularmente relevante em domínios como finanças, gestão de portfólio e energia, onde as decisões são sequenciais e as incertezas são intrínsecas ao ambiente.

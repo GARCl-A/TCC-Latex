@@ -1,2 +1,19 @@
-% TODO: mercado_energia
-\section{TODO}
+\subsection*{Panorama Geral}
+
+O setor elétrico brasileiro, vasto e complexo, é caracterizado por uma matriz energética predominantemente hidrelétrica, o que o torna suscetível a variações climáticas e hidrológicas. A gestão eficiente e a operação segura desse sistema são cruciais para a estabilidade econômica do país. Nos últimos anos, o mercado de energia passou por significativas transformações, impulsionadas pela busca por maior eficiência, sustentabilidade e liberalização. A evolução regulatória e a inserção crescente de fontes renováveis intermitentes, como eólica e solar, introduziram novas camadas de complexidade e incerteza no planejamento e na operação do sistema. 
+
+\subsection*{Estrutura e Agentes do Mercado}
+
+O mercado de energia elétrica no Brasil é segmentado em Ambiente de Contratação Regulada (ACR) e Ambiente de Contratação Livre (ACL). No ACR, a compra e venda de energia ocorre por meio de leilões coordenados pela Agência Nacional de Energia Elétrica (ANEEL), com contratos de longo prazo que visam garantir o suprimento e a moderação de preços para os consumidores cativos. No ACL, agentes como geradores, comercializadores e consumidores livres negociam bilateralmente, buscando otimizar seus custos e receitas. Essa flexibilidade permite aos consumidores escolher seus fornecedores e negociar condições contratuais mais vantajosas, enquanto os comercializadores atuam como intermediários, gerindo portfólios de compra e venda de energia para atender à demanda de seus clientes e mitigar riscos de mercado.
+
+\subsection*{Preço de Liquidação das Diferenças (PLD)}
+
+O Preço de Liquidação das Diferenças (PLD) é um dos pilares do mercado de energia brasileiro, atuando como o preço spot de referência para a liquidação de diferenças entre a energia contratada e a energia efetivamente gerada ou consumida. O PLD é determinado semanalmente para cada submercado (Norte, Nordeste, Sudeste/Centro-Oeste e Sul) pelo Modelo Otimizador de Despacho Hidrotérmico (NEWAVE) e pelo Modelo de Otimização Dinâmica de Curto Prazo (DECOMP), ambos operados pelo Operador Nacional do Sistema Elétrico (ONS) e pela Câmara de Comercialização de Energia Elétrica (CCEE). Sua formação é fortemente influenciada pelo Custo Marginal de Operação (CMO), que reflete o custo de produzir o último MWh de energia para atender à demanda. Historicamente, o PLD tende a seguir o comportamento do CMO, tornando este último um importante proxy para os preços futuros de energia.
+
+Adicionalmente, o PLD possui limites regulatórios de preço mínimo (piso) e máximo (teto), estabelecidos pela ANEEL e divulgados pela CCEE. Esses limites são aplicados para mitigar a volatilidade extrema, e os valores de PLD que excedem ou ficam abaixo desses patamares são truncados (`clipped`) para respeitar as regras do mercado (CCEE, 2024a).
+
+As incertezas hidrológicas, a demanda de energia e a disponibilidade de geração térmica e eólica influenciam diretamente o PLD, resultando em sua alta volatilidade e na necessidade de ferramentas avançadas para a gestão de riscos e otimização de portfólios. Essa volatilidade é um fator crítico para os agentes do ACL, que precisam gerenciar ativamente sua exposição ao mercado de curto prazo para evitar perdas financeiras significativas (CCEE, 2024a).
+
+\subsection*{Gestão de Risco e Contratos}
+
+A gestão de risco no mercado de energia envolve a tomada de decisões estratégicas sobre a contratação de energia, a fim de proteger os agentes das variações do PLD e de outros fatores de incerteza. Os contratos bilaterais, sejam de compra ou venda, são os principais instrumentos utilizados para fixar preços e volumes de energia ao longo do tempo. A decisão de contratar é complexa e envolve a avaliação de cenários futuros, a modelagem de incertezas e a aplicação de técnicas de otimização para maximizar o resultado econômico da comercializadora, ao mesmo tempo em que se minimiza a exposição a riscos indesejados. É nesse contexto que as ferramentas de programação estocástica se tornam indispensáveis, permitindo aos agentes desenvolver estratégias de contratação robustas e adaptáveis às dinâmicas do mercado (Bessa et al., 2006; MME, 2002).

@@ -1,2 +1,11 @@
-% TODO: pdde_literatura
-\section{TODO}
+\subsection*{Conceito e Histórico}
+
+A Programação Dinâmica Dual Estocástica (PDDE), ou Stochastic Dual Dynamic Programming (SDDP), é uma técnica de decomposição amplamente utilizada para resolver problemas de Programação Estocástica Multiestágio de grande porte, especialmente aqueles com estrutura de incerteza em árvore ou grafo. A PDDE foi introduzida por Pereira e Pinto (1991) e, desde então, tem sido aplicada com sucesso em diversas áreas, com destaque para o planejamento de sistemas de energia elétrica. Sua principal vantagem é a capacidade de evitar a construção explícita de toda a árvore de cenários, o que se torna computacionalmente inviável para problemas com muitos estágios e ramificações. Em vez disso, a PDDE aproxima as funções de custo futuro por meio de cortes de Benders, gerados iterativamente.
+
+\subsection*{Funcionamento da PDDE}
+
+A PDDE opera em um processo iterativo que alterna entre duas etapas principais: forward (para frente) e backward (para trás). Na etapa forward, o modelo simula trajetórias de cenários, tomando decisões em cada estágio com base nas informações disponíveis e nas aproximações das funções de custo futuro. Isso permite a identificação de estados visitados e a coleta de informações sobre o desempenho da política atual. Na etapa backward, o processo percorre os estágios em ordem reversa. Em cada estágio e para cada estado visitado na etapa forward, um subproblema é resolvido, e as soluções duais desses subproblemas são utilizadas para gerar cortes de Benders. Esses cortes são então adicionados às funções de custo futuro dos estágios anteriores, refinando suas aproximações e melhorando a qualidade das decisões na próxima iteração forward. O processo continua até que a diferença entre os limites inferior e superior da função objetivo seja suficientemente pequena, garantindo a convergência para a solução ótima.
+
+\subsection*{Vantagens e Aplicações}
+
+A principal vantagem da PDDE reside em sua capacidade de lidar com a maldição da dimensionalidade, permitindo a solução de problemas com um número muito maior de estágios e cenários do que seria possível com a formulação determinística equivalente. Isso a torna particularmente adequada para aplicações em sistemas de energia, gestão de recursos hídricos, planejamento financeiro e gestão de portfólios, onde a natureza multiestágio e as incertezas são fatores dominantes. A evolução de pacotes computacionais como SDDP.jl (Dowson e Kapelevich, 2021) tem facilitado a implementação e a aplicação da PDDE, tornando-a uma ferramenta acessível e eficiente para pesquisadores e profissionais.
