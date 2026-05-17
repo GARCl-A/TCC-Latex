@@ -13,11 +13,13 @@ Os comercializadores atuam como intermediários no ACL, gerindo portfólios de c
 \subsection{Preço de Liquidação das Diferenças}
 \label{subsec:pld}
 
-O Preço de Liquidação das Diferenças (PLD) é o preço de referência para a liquidação financeira das diferenças entre a energia contratada e a energia efetivamente gerada ou consumida. A CCEE calcula o PLD semanalmente para cada submercado (Norte, Nordeste, Sudeste/Centro-Oeste e Sul), com base no Custo Marginal de Operação (CMO) derivado de modelos de otimização do despacho hidrotérmico \cite{ccee2024a}.
+O Preço de Liquidação das Diferenças (PLD) é o preço de referência para a liquidação financeira das diferenças entre a energia contratada e a energia efetivamente gerada ou consumida. A CCEE calcula o PLD semanalmente para cada submercado (Norte, Nordeste, Sudeste/Centro-Oeste e Sul), com base no Custo Marginal de Operação (CMO) obtido pelo encadeamento de dois modelos de otimização do despacho hidrotérmico: o NEWAVE, de médio prazo, e o DECOMP, de curto prazo \cite{guerreiro2017,ccee2024a}.
 
-O PLD está sujeito a limites regulatórios de preço mínimo e máximo estabelecidos anualmente pela ANEEL. Valores de CMO que excedem ou ficam abaixo desses patamares são truncados para o limite correspondente \cite{ccee2024a}. A dependência da matriz hidrelétrica faz com que o PLD apresente variabilidade associada às condições hidrológicas, o que torna a gestão da exposição ao mercado de curto prazo um aspecto relevante para os agentes do ACL.
+O PLD está sujeito a limites regulatórios de preço mínimo e máximo estabelecidos anualmente pela ANEEL. Valores de CMO que excedem ou ficam abaixo desses patamares são truncados para o limite correspondente \cite{ccee2024a}.
+
+A série histórica do PLD apresenta comportamento estatístico incompatível com a distribuição normal, com assimetria pronunciada e caudas pesadas \cite{guerreiro2017}. Essa característica, combinada com a dependência das condições hidrológicas, torna inadequadas abordagens de valor esperado simples e reforça a necessidade de modelagem estocástica explícita para a gestão da exposição ao mercado de curto prazo.
 
 \subsection{Gestão de Risco e Contratos Bilaterais}
 \label{subsec:gestao_risco}
 
-Os contratos bilaterais de compra e venda de energia são o principal instrumento de gestão da exposição ao PLD. Ao fixar volumes e preços com antecedência, um agente reduz a incerteza sobre seu resultado financeiro, ao custo de abrir mão de eventuais ganhos caso o preço \emph{spot} evolua favoravelmente. A decisão de contratar envolve, portanto, um balanço entre proteção contra risco e flexibilidade operacional \cite{bessa2006}.
+Os contratos bilaterais de compra e venda de energia são o principal instrumento de gestão da exposição ao PLD. Ao fixar volumes e preços com antecedência, um agente reduz a incerteza sobre seu resultado financeiro, ao custo de abrir mão de eventuais ganhos caso o preço \emph{spot} evolua favoravelmente. A decisão de contratar envolve, portanto, um balanço entre proteção contra risco e flexibilidade operacional \cite{bessa2006,pedrini2019}.

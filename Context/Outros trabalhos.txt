@@ -1,0 +1,657 @@
+Capítulo 4 RENATA:
+
+4 MODELO ESTOCÁSTICO
+Segundo BIRGE; LOUVEAUX (2011) o desenvolvimento de métodos de
+otimização capazes de lidar com incertezas tem sido uma área de pesquisa
+intensamente desenvolvida nas últimas décadas, sendo que, atualmente, existem três
+principais abordagens para a solução destes problemas: Otimização Estocástica,
+Otimização Robusta e Restrições Probabilísticas.
+Modelos de otimização estocástica se baseiam na criação de uma árvore de
+cenários para tratar implicitamente as variáveis aleatórias do problema. Estes modelos
+são úteis desde que possam ser resolvidos com um número apropriado de cenários.
+Por outro lado, a otimização robusta não demanda uma representação tão precisa das
+incertezas, focando nos piores eventos que podem ocorrer. Porém, este método
+desconsidera a probabilidade real destes eventos catastróficos acontecerem e, por
+isso, a otimização robusta geralmente leva a maiores custos em relação a outros
+métodos. Por fim, o método de Restrições Probabilísticas consegue encontrar
+equilíbrio entre robustez e custo, pela avaliação da probabilidade da solução
+selecionada ser factível. Nesse método, as restrições probabilísticas podem ser nãoconvexas e difíceis de serem estimadas, potencialmente demandando grande esforço
+computacional (VAN ACKOOIJ et al., 2018).
+Dentre os modelos descritos, os modelos de otimização estocástica se
+destacam por terem sólida fundamentação matemática e por serem apoiados pela
+teoria da probabilidade. Além disso, seu objetivo é encontrar uma política que tenha
+um bom desempenho médio para todas, ou quase todas, as possíveis realizações dos
+dados aleatórios (SHAPIRO; PHILPOTT, 2007). Como, neste trabalho, busca-se
+definir a qualidade da decisão de realização de um contrato de longo-prazo com uma
+planta eólica, é importante analisar a robustez para um grande número de realizações
+futuras da incerteza. Desta forma, foi escolhida a abordagem estocástica para este
+problema.
+A maior parte dos problemas, em que são aplicados modelos estocásticos,
+são lineares e de dois estágios. Nesses, uma decisão é tomada no primeiro estágio
+antes que as incertezas sejam reveladas. Depois, no segundo estágio, novas decisões
+deverão ser tomadas. Assim, o estágio não tem relação com o tempo, mas sim com o
+momento que o evento aleatório ocorre.
+58
+Além dos problemas dois estágios existem os problemas multi-estágio.
+Nesses as incertezas são reveladas gradualmente ao longo do tempo e as decisões
+devem ser adaptadas a este processo (SHAPIRO; DENTCHEVA; RUSZCZYŃSKI,
+2009).
+De acordo com as características previamente descritas do problema, um
+consumidor precisa investigar o impacto de realizar um contrato de longo-prazo com
+uma usina eólica (primeiro estágio) na sua estratégia de contratação bilateral
+(segundo estágio). Assim, neste trabalho, o problema é representado como um
+modelo de programação estocástica de dois estágios, sendo que, no primeiro estágio,
+tem-se como objetivo minimizar o custo esperado de contratação da planta eólica,
+respeitando-se as janelas de construção e duração da usina ao longo do horizonte de
+planejamento. Essencialmente, o problema de primeiro estágio é um problema multiestágio binário misto, cujas características do conjunto restrito permitem resolvê-lo de
+maneira muito eficiente por um software de programação linear inteira mista (PLIM).
+Uma vez resolvido o problema de primeiro estágio, tem-se que solucionar um
+problema de segundo estágio cujo objetivo consiste em minimizar os demais custos
+envolvidos no problema. Este problema de segundo estágio, como será mostrado a
+seguir, é também um problema multi-estágio linear e de grande porte. A estratégia
+geral de solução é mostrada na Figura 4.1, na qual a separação nos dois problemas
+(primeiro e segundo estágio) é feita com base na decomposição de Benders (DB). A
+seguir será explicada a estrutura da árvore de cenários e depois são descritos os
+problemas de primeiro e de segundo estágio.
+Figura 4.1 - Estratégia geral de solução
+Fonte: Produção do próprio autor.
+Problema original
+(PLIM)
+Primeiro estágio
+(PLIM)
+Segundo estágio
+(PL)
+Decomposição
+59
+4.1 ESTRUTURA DA ÁRVORE
+Os dados aleatórios são agrupados de forma a gerar os diferentes cenários
+chamados aqui de ω. Os dados de preços e geração eólica são criados de forma
+independente e, portanto, não possuem correlação entre si. No entanto, conforme
+mencionado na etapa de revisão bibliográfica, essa correlação existe e atesta para a
+complementariedade entre as fontes hidro e eólica. Dessa forma, não considerar a
+correlação pode prejudicar a contratação da planta eólica, principalmente no
+Nordeste, onde a correlação é forte. Por opção do autor do trabalho, essa correlação
+será considerada em trabalhos futuros.
+Assim, a Figura 4.2 mostra um exemplo de árvore de cenários multi-estágio
+na qual os nós são os pontos associados à realização das variáveis aleatórias do
+problema em determinado estágio de tempo, representados pelos círculos escuros,
+que normalmente estão associados à tomada de decisão. Para cada nó é atribuída
+uma probabilidade, que no caso de problemas com múltiplos estágios, é uma
+composição da probabilidade de todos os nós antecessores até o correspondente
+estágio. As realizações das variáveis aleatórias são representadas por ξ e um cenário
+é definido como um caminho completo do primeiro estágio até o último. Pela análise
+da árvore é possível notar que as decisões são tomadas de forma sequencial, i.e.,
+conforme se avança na árvore as novas decisões devem levar em conta as decisões
+já tomadas nos nós antecessores. Isto implica que os cenários 1 e 2 compartilham a
+mesma decisão tomada no nó 2 e todos os cenários (1,2,3,4) compartilham a mesma
+decisão tomada no nó 1. Esse acoplamento de decisões caracteriza uma condição de
+não-antecipatividade, cuja ideia consiste nas decisões sendo tomadas sem que seja
+possível antecipar qual realização irá de fato acontecer (VERONESE, 2013).
+60
+Figura 4.2 - Exemplo de árvore de cenários.
+Fonte: (VERONESE, 2013).
+Um aspecto importante a ser observado em um problema multi-estágio é que
+a dimensão da árvore de cenários cresce exponencialmente com o número de
+discretizações da variável estocástica, o que constitui um problema para análises de
+longo-prazo. No entanto, um maior número de aberturas pode significar uma melhor
+amostragem do processo aleatório resultando em uma solução mais robusta.
+Portanto, o esforço computacional deve ser balanceado com a qualidade da solução
+de forma a definir o tamanho da árvore a ser usada (VERONESE, 2013).
+Considerando a duração do contrato com a planta eólica de 20 anos e um
+período de decisão para contratação da usina de 5 anos, pode-se supor um horizonte
+de planejamento de 24 anos. A solução desse problema considerando uma abertura
+de 2 cenários por estágio resultaria em uma árvore contendo 8.388.608 nós para o
+modelo anual. Tal dimensão é muito custosa computacionalmente e considera um
+número muito limitado de realizações das variáveis aleatórias por ano. Além disso,
+busca-se utilizar uma discretização mensal da árvore o que aumentaria para 2,48∙1086
+nós a sua dimensão.
+Desta forma, a estrutura inicial escolhida para a árvore é mostrada na Figura
+4.3. Os nós são representados pelo índice h, sendo que o total de nós em toda a
+árvore é N. As aberturas ocorrem anualmente, sendo os nós referentes aos meses
+(m), determinísticos dentro de um mesmo ano (t). Esta estrutura se propaga até o
+61
+último ano em que a usina pode ser contratada, representado por β. Após este período
+a discretização continua sendo mensal, mas não ocorrem mais aberturas anuais.
+Assim, os cenários passam a ser determinísticos já que as incertezas são muito
+grandes até para serem modeladas.
+Figura 4.3- Estrutura geral da árvore.
+Fonte: Produção do próprio autor.
+A usina pode começar a operar apenas a partir do ano ζ, ou seja, a usina pode
+ser contratada de ζ até β, no entanto, este fator não altera a estrutura da árvore.
+Considerando sete realizações das variáveis aleatórias por ano e um período
+de cinco anos para a decisão de entrada em operação da usina, tem-se um total de
+2.401 cenários possíveis para todo o horizonte.
+4.2 ESTRATÉGIA DE SOLUÇÃO
+Por meio da DB, o problema original é dividido em um problema mestre (MP),
+ou problema de primeiro estágio, e em um problema de segundo estágio, ou
+subproblema (SP). De forma a coordenar os dois problemas, representa-se o custo
+ξ(1,1)
+Ano 1 2 β t
+ξ(1,m) ξ(1,12)
+ξ(h,1)
+ξ(h,1)
+ξ(h,1)
+ξ(N,12)
+ξ(h,12)
+T
+ξ(h,12) ξ(h,1)
+62
+do SP no MP mediante uma função valor que é aproximada por meio de planos
+cortantes (ou cortes de Benders), os quais são chamados de cortes de otimalidade.
+Ainda, podem ser adicionados cortes de viabilidade que buscam descartar soluções
+do MP que tornem o SP inviável. No entanto, como o consumidor pode atender a sua
+carga sem precisar da planta eólica, os cortes de viabilidade não são necessários no
+problema deste trabalho.
+Apesar do MP e do SP estarem sujeitos à mesma estrutura de árvore de
+cenários, estes possuem características distintas. O MP visa decidir se a planta eólica
+é contratada, buscando minimizar os custos desse investimento, conforme mostrado
+matematicamente a seguir.
+( , )
+12
+( - , )
+( , ), 12 1
+1 1 0
+min
+(1 ) Ah
+A r h m
+h A h m t m rm
+h m r
+pu  + −
+= = =
+ 
+ =  +     +     D-1
+N D-1
+D-1
+D-1
+W
+C
+J
+(4.1)
+s.a.:
+z z z b t t t tm bm b m − +   − + − = + − −1, 0, [ 1, 1], 2, 1 D T D
+(4.2)
+1
+1
+0 tm
+t
+z
+−
+=
+ −
+T+D
+D
+(4.3)
+u z z tm tm t m − +  ,1−
+0
+(4.4)
+0, 1, tm zt == ζ
+(4.5)
+0, , tm ut == βT
+(4.6)
+0, , {0,1}. tm tm    zu
+(4.7)
+N
+1
+W ( ) 0
+hh h hm hm t m t m
+h
+p z z
+=
+ −  +     −   
+(4.8)
+Para a transformação do problema determinístico no problema estocástico
+foram inseridos novos índices e variáveis, como segue:
+h índice associado aos nós da árvore de cenários;
+N número total de nós do horizonte de planejamento;
+th índice associado ao ano t referente ao nó h;
+ph probabilidade de ocorrência da realização da variável aleatória do nó h;
+A j h ( , )
+ancestral j do nó h;
+α variável que representa os custos do SP no MP;
+Ψ custo ótimo do MP (R$/h);
+63
+πhm multiplicador de Lagrange associado à Restrição
+tm z
+valor fornecido pelo MP para a disponibilidade da planta eólica na iteração
+atual.
+Nota-se que as Restrições (4.2) a (4.6) não se alteram em relação ao modelo
+determinístico. Isto ocorre, pois, a decisão de contratação da planta eólica é única
+para cada estágio de tempo. Apesar de única, essa decisão está sujeita à uma árvore
+de cenários de preços e geração relacionados à planta eólica, como é mostrado na
+função objetivo do MP, Equação (4.1). Essa função busca minimizar o custo dos dois
+estágios do problema, sendo que α é a variável responsável por aproximar os custos
+de segundo estágio na função objetivo do primeiro estágio. As Restrições (4.2) a (4.4)
+estabelecem que uma vez que a planta é contratada ela deve ficar disponível por toda
+a sua vida-útil. As Restrições (4.5) e (4.6) determinam que a planta só poderá estar
+disponível a partir do ano ζ e que o período de decisão para contratação da planta se
+estende até o ano β. O corte de otimalidade da Equação (4.8), responsável pela
+coordenação entre o SP e o MP será explicado após a exposição do SP. O MP é
+resolvido pelo seu equivalente determinístico.
+Por outro lado, o SP busca minimizar os custos para suprimento da demanda
+já considerando se a planta eólica foi contratada e tendo em vista todos as realizações
+futuras das variáveis aleatórias. Esse é dado por:
+12
+12 1 12 1
+1 1 1
+12 1
+1
+min
+(1 ) (1 )
+1
+max( , )
+(1 )
+h
+h
+h
+h
+t
+ihm ihm
+h ihm hm rm tm
+h m i r t
+tm ihm ihm hm
+x
+py
+q
+ + −  + −
+= = = =
+ + −
+
+   
+ = +   +        + +   
+
+ 
++ 
+   
+NI +I P
+S
+J J
+ R S
+J
+(4.9)
+s.a.:
+1
+h
+ihm hm hm hm t m
+i
+a y z
+=
+ + = − 
+I
+LW
+(4.10)
+a a x a ihm ih m ihm i A i h m − − + = , 1 , ( , ), −
+0
+(4.11)
+( ) ( )
+12
+(1, ),
+1
+0
+12
+m
+hm A h m
+g g m
+hm
+yy
+q
+==
++
+−
+
+(4.12)
+64
+0 hm hm y 
+max +V
+(4.13)
+0 ihm ihm x − Mmax
+(4.14)
+, , 0 ihm ihm ihm x a q 
+(4.15)
+Em que Θ é o custo ótimo do SP (R$/h).
+No problema a Restrição (4.10) realiza o balanço entre energia
+contratada/gerada e a demanda do consumidor enquanto que a Restrição (4.11)
+controla os montantes acumulados de cada contrato bilateral firmado. A Restrição
+(4.12) quantifica o montante médio de subcontratação dos últimos 12 meses que está
+sujeito à penalidade ao passo que as Restrições (4.13) a (4.15) atestam para os limites
+máximos e mínimos das variáveis. O SP também é resolvido pelo seu equivalente
+determinístico.
+Por fim, a Restrição (4.8) do MP mostra o corte de otimalidade que deve ser
+adicionado a cada iteração do algoritmo de solução. Esse corte está associado à
+Restrição (4.10) do SP, a qual realiza o acoplamento entre os problemas. O corte
+restringe o valor de α que é a variável responsável por aproximar os custos do SP no
+MP. Ele atesta que α deve ser maior ou igual ao custo ótimo do SP(Θ), dado o valor
+fixo de ztm (
+tm z
+) obtido da solução do MP, descontando a contribuição decorrente da
+mudança da variável ztm na redução do custo da função objetivo do segundo estágio.
+Um corte será adicionado a cada iteração, descartando as soluções piores do que a
+atual.
+O algoritmo de solução do problema é descrito a seguir.
+4.2.1 Algoritmo de decomposição de Benders
+O algoritmo para DB exposto abaixo foi formulado de acordo com as
+especificidades do problema alvo deste trabalho.
+1. Utilize limite inferior LB= 0, limite superior UB= +∞ e defina uma tolerância τ
+> 0 e um indicador de iteração (it) igual a 1;
+2. Resolva o MP (4.1)-(4.8), dada sua solução iguale
+tm z
+ao resultado da variável
+ztm e iguale LB à Ψ.
+3. Resolva o SP (4.9)-(4.15), retire os πhm associados à Restrição (4.10) de
+forma a compor os cortes de otimalidade e atualize
+UB =  − +  
+;
+65
+4. Teste de otimalidade: se (UB-LB)/UB ≤ τ, pare. Ainda, se it for maior que um
+limite de número de iterações, pare;
+5. Insira os cortes de otimalidade no MP e retorne ao passo 2.
+
+-----
+
+Capítulo 2 - Taisy
+
+2 O SISTEMA ELETRICO BRASILEIRO
+2.1 O SETOR ELÉTRICO NO BRASIL: DO INÍCIO À REESTRUTURAÇÃO
+O mercado de energia elétrica no Brasil teve início no século XX com o desenvolvimento
+das industrias nas regiões do Rio de Janeiro e São Paulo, levando ao surgimento das
+primeiras companhias de energia elétrica no país incentivadas pelo investimento de capital
+estrangeiro [26]. O setor de energia elétrica não possuía legislação especifica e o regime
+tarifário previa os reajustes das tarifas pela variação cambial.
+Em 1930, após o estabelecimento do Estado Novo por Getúlio Vargas, há uma mudança
+na orientação político-ideológica do país, iniciando assim um processo de expansão da
+participação das empresas estatais na economia brasileira. O Código de Águas marca
+a reorientação ideológica para o setor elétrico [30]. A partir deste marco regulatório
+foi reduzindo-se progressivamente a participação privada nos investimentos do setor e
+ampliando-se a participação das empresas estaduais e federais [2].
+A partir dos anos 50, diversas empresas federais e estaduais passaram a atuar sob a
+liderança da Eletrobrás, que assumiu as funções de coordenação, planejamento, operação
+e financiamento do setor. O modelo estatal consolidou-se nos anos 70 e 80, garantindo o
+suprimento das necessidades de energia elétrica para a industrialização forçada, marcada
+pelo modelo de substituição das importações no Brasil. A construção de Itaipu, em 1984,
+marca a consolidação deste modelo [1].
+Na década de 80, a participação estatal na economia passou a ser questionada, pois
+a crise cambial e fiscal fez com que o Estado brasileiro já não pudesse mais impulsionar
+a economia. Como consequência, as empresas de energia sofreram forte impacto e se
+mantinham com empréstimos internacionais, pagando elevados juros e suas tarifas passaram
+a ser usadas como instrumento macroeconômico de combate à inflação.
+A situação do setor elétrico era insustentável, generalizando-se a inadimplência intrasetorial [15]. A maioria das empresas vivia um deficit de caixa, uma incapacidade de
+pagamento das dívidas externas e internas, que eram honradas pelo tesouro nacional.
+Outro fator que gerou grande impacto ao setor, foi a má gestão das empresas estatais que
+foram utilizadas para fins políticos, inviabilizando um gerenciamento administrativo em
+bases técnicas e focada na eficiência.
+Assim, surgiu a ideia de reformar o setor elétrico brasileiro, baseado essencialmente na
+premissa de introdução da competição nos segmentos de geração e comercialização e na
+privatização de empresas estatais [18]
+No ano de 1994, seguindo modelos internacionais, o governo federal, através do Ministério de Minas e Energia com a ajuda da empresa americana de consultoria e contabilidade
+[18], elaborou um projeto para reestruturar o setor elétrico brasileiro. A primeira medida
+14
+foi estabelecer a necessidade de separar cada etapa da cadeia produtiva, criando empresas
+para operar cada atividade. Para construir um mercado competitivo nos setores de geração
+e comercialização, iniciou-se um processo de privatização das estatais, mantendo sob
+regulação a transmissão e a distribuição [27].
+Ao ver a necessidade de um sistema regulatório adequado, capaz de promover a
+concorrência onde possível e, na impossibilidade desta, gerar incentivos para ganhos de
+qualidade e eficiência por meio da atuação de um regulador independente e com autonomia
+decisória e financeira [16], o governo federal instituiu novos órgãos para atuar no setor.
+Assim, em 1996, estabeleceu-se a Agência Nacional de Energia Elétrica (ANEEL). A
+ANEEL é uma agência independente que fiscaliza todos os serviços relacionados ao sistema
+elétrico brasileiro. Sua missão é proporcionar condições favoráveis para que o mercado de
+energia elétrica se desenvolva com equilíbrio entre os agentes e em benefício da sociedade
+[6].
+Para garantir ainda a competição e a regulação, mostrou-se necessária a criação de um
+operador independente. Assim, foi criado em 1998 o Operador Nacional do Sistema (ONS),
+o órgão responsável pela coordenação e controle da operação das instalações de geração e
+transmissão de energia elétrica no Sistema Interligado Nacional (SIN) e pelo planejamento
+da operação dos sistemas isolados do país, sob a fiscalização e regulação da ANEEL [29].
+Também em 1998 foi criado o o Mercado Atacadista de Energia Elétrica (MAE), órgão
+que ficaria responsável por gerenciar os contratos de compra e venda de energia com o
+intuito de instituir um ambiente propício para a formação de preços e para a sinalização
+de oportunidades de investimento no setor [2].
+A partir de 2003, após a crise energética de 2001, o Governo iniciou mais uma reforma do
+setor elétrico brasileiro, que levou a criação de três novas instituições. O novo modelo definiu
+a criação da Empresa de Pesquisa Energética (EPE), responsável pelo planejamento de
+longo prazo do setor, do Comitê de Monitoramento do Setor Elétrico (CMSE), responsável
+pela segurança do suprimento de energia elétrica ao longo do território nacional e Câmara
+de Comercialização de Energia Elétrica (CCEE), em substituição ao MAE, encarregada
+de viabilizar a comercialização de energia respeitando as regras existentes em cada área
+do setor [11].
+15
+A Figura 1 apresenta uma síntese da estrutura atual do setor elétrico brasileiro.
+Figura 1 – Estrutura atual do setor elétrico brasileiro
+Fonte: ABRADEE 2018 [5]
+2.2 OS AGENTES DO SEB
+Os Agentes são empresas que atuam no setor de energia elétrica e dividem-se nas
+Categorias de Geração, Distribuição, Comercialização, Consumidores Livres e Especiais,
+conforme definido na Convenção de Comercialização [10]. Os principais agentes do setor
+são :
+• Agente de Geração: podem ser classificados em três tipos: concessionários de serviço
+público de geração, produtores independentes de energia elétrica e auto-produtores.
+A atividade de geração de energia elétrica tem caráter competitivo, assim sendo, os
+agentes de geração poderão vender energia em todos os ambientes de comercialização
+e possuem livre acesso aos sistemas de transmissão;
+• Agente de Transmissão: compreendem todas as empresas que atuam em atividades
+relacionadas ao transporte da energia elétrica em alta tensão (rede básica) até os
+grandes centros de consumo;
+16
+• Agente de Distribuição: operam o sistema na sua área de concessão, participando
+do sistema interligado e sendo usuários da rede básica. Contratam serviços de
+transmissão de energia e serviços ancilares do operador nacional do sistema elétrico.
+A atividade de distribuição é orientada para o serviço de rede e de venda de energia
+aos consumidores com tarifa e condições de fornecimento reguladas pela ANEEL
+(consumidores cativos);
+2.3 AMBIENTES DE CONTRATAÇÃO
+A comercialização de energia no Brasil é realizada em dois ambientes de mercado: o
+Ambiente de Contratação Regulada (ACR) e o Ambiente de Contratação Livre (ACL). Em
+cada ambiente de contratação há regras especificas que determinam os tipos e flexibilidades
+dos contratos, bem como a forma como são definidos seus preços [31]. A relação entre os
+agentes e os ambientes de contratação são apresentados na Figura 2.
+Figura 2 – Relação entre agentes e ambientes de contratação
+Fonte: Santos 2013 [31]
+2.3.1 Ambiente de Contratação Regulado
+O Ambiente de Contratação Regulado (ACR) caracteriza-se como o ambiente onde
+as distribuidoras de energia elétrica devem adquirir energia a fim de suprir a necessidade
+dos clientes. A energia nesse ambiente é adquirida através de leilões reversos que buscam
+garantir a menor tarifa de energia elétrica para o consumidor final, a duração dos contratos
+firmados nos leiloes e a flexibilidade dos mesmos são definidos pelo governo através de
+legislação especifica definida em cada leilão.
+17
+A contratação no ACR é formalizada através de contratos bilaterais regulados, denominados Contratos de Comercialização de Energia Elétrica no Ambiente Regulado (CCEAR)
+[10].
+As distribuidoras devem também adquirir de forma compulsória energia proveniente da
+usina hidroelétrica de Itaipu, do programa de incentivo ás fontes alternativas (PROINFA),
+das usinas nucleares Angra I e Angra II, além de cotas de UHEs, cujas concessões estejam
+sendo renovadas. Os preços desses contratos compulsórios são definidos através de legislação
+específica
+2.3.2 Ambiente de Contratação Livre
+O Ambiente de contratação Livre (ACL) é o ambiente onde os consumidores tem
+a liberdade de negociar os contratos de energia para suprir suas necessidades. Nesse
+ambiente, a duração e as flexibilidades contratuais, bem como os preços praticados, são
+definidos livremente entre as partes [3].
+As empresas que negociam em ambiente livre podem fazer contratos de longo prazo,
+que asseguram uma receita fixa por um longo período, ou negociar a sua energia em
+contratos de curto prazo que são derivados do preço de curto prazo [31].
+Os consumidores livres são aqueles que, atendendo aos requisitos da legislação vigente,
+podem escolher seu fornecedor de energia elétrica geradores e comercializadores por meio
+de livre negociação. Caracterizam-se como consumidores livres, consumidoras com carga
+maior ou igual a 3.000 kW atendidas em tensão maior ou igual a 69 kV [3]. Também são
+livres para escolher seu fornecedor novas unidades consumidoras instaladas após 07 de julho
+de 1995 com demanda maior ou igual a 3.000 kW e atendidas em qualquer tensão. Estes
+consumidores podem comprar energia de qualquer agente de geração ou comercialização
+de energia [10].
+A partir de 1998, conforme regulamenta a Lei 9.427 de dezembro de 1996, os consumidores com demanda mínima de 500 kW, atendidos em qualquer tensão de fornecimento,
+têm também o direito de adquirir energia de qualquer fornecedor, desde que a energia
+adquirida seja oriunda de Pequenas Centrais Hidrelétricas (PCHs) ou de fontes alternativas
+(eólica, biomassa ou solar).
+
+
+-----
+
+Capítulo 2.5 - Mário
+
+2.5 Testes com o PLD
+O Prec¸o de Liquidac¸ao das Diferenc¸as (PLD) ˜ e o prec¸o ´ spot no mercado de energia
+eletrica brasileira. Mensalmente os ´ players (comercializadoras, geradoras, distribuidoras e consumidores do mercado livre) com exposic¸ao (parcela long ou short dos ˜
+portfolios de cada agente) tem suas posic¸ ´ oes liquidadas ao PLD. Basicamente, existem ˜
+duas estrategias que um agente pode adotar: n ´ ao ter nenhuma exposic¸ ˜ ao ao mercado ˜
+de curto prazo ou ter alguma exposic¸ao. O n ˜ ´ıvel de exposic¸ao, ˜ e derivado da estrat ´ egia ´
+de comercializac¸ao de cada agente e depende da avers ˜ ao ao risco e do momento de ˜
+mercado. Em situac¸oes em que o PLD est ˜ a muito alto, ou muito vol ´ atil o mercado ´
+tende a se proteger zerando suas exposic¸oes com contratos bilaterais de forma a n ˜ ao˜
+20
+incorrer em risco da variac¸ao do PLD. ˜
+Figura 2.9: Hist´orico do PLD no subsistema SE/CO
+2.5.1 Teste da Distribui¸c˜ao dos Retornos
+E importante a realizac¸ ´ ao de um teste estat ˜ ´ıstico com base no historico de retornos do ´
+PLD para o submercado SE/CO para o estudo de risco a fim de se determinar presenc¸a
+de assimetrias e eventos extremos.
+21
+Figura 2.10: Histograma dos Retornos Hist´oricos do PLD
+Atraves do histograma gerado pelo programa Eviews, ´ e poss ´ ´ıvel rejeitar a hipotese ´
+de que a distribuic¸ao dos retornos do PLD ˜ e normal j ´ a que a estat ´ ´ıstica Jarque-Bera e´
+igual a 146, 9706. Uma forma mais visual de comparar o histograma dos retornos do
+PLD e incluir no gr ´ afico a normal te ´ orica sobreposta ao histograma como na figura ´
+2.11:
+Figura 2.11: Histograma com Normal Te´orica dos Retornos Hist´oricos do PLD
+22
+Na literatura sobre comportamento de prec¸os de commodities muito comumente e´
+encontrado a caracter´ıstica de reversao˜ a m` edia. ´ E importante, ent ´ ao verificar n ˜ ao s ˜ o´
+do ponto de vista de caracterizac¸ao da s ˜ erie de prec¸os, mas tamb ´ em, para a escolha de ´
+um modelo de simulac¸ao compat ˜ ´ıvel com o comportamento dos prec¸os se o PLD segue
+ou nao a revers ˜ ao˜ a m` edia. O processo mais simples de revers ´ ao a m ˜ edia ´ e conhecido ´
+como Processo de Ornstein-Uhlenbeck descrito pela equac¸ao (2.1), ou seja, mudanc¸as ˜
+esperadas em x dependem apenas da diferenc¸a entre x e x¯.
+dx = η (¯x − x) dt + σdz (2.1)
+Alem disso, um processo com revers ´ ao˜ a m` edia tem as seguintes caracter ´ ´ısticas:
+• Satisfaz as propriedades de Markov;
+• Nao possui incrementos independentes; ˜
+• E[xt
+] = ¯x + (x0 − x¯) e
+−ηt;
+• V [xt − x¯] = σ
+2
+2η
+(1 − e
+−ηt) .
+O software NEWAVE usado para previsao de prec¸os de m ˜ edio prazo (horizonte ´
+de 5 anos com discretizac¸ao mensal) utiliza Programac¸ ˜ ao Din ˜ amica Dual Estoc ˆ astica. ´
+A determinac¸ao do PLD semanal ˜ e um ´ output do encadeamento do Decomp, software usado para a operac¸ao de curto prazo (2 a 6 meses com etapas semanais), com o ˜
+NEWAVE.
+Uma questao relevante da formulac¸ ˜ ao do NEWAVE ˜ e que os prec¸os simulados con- ´
+vergem para a media em horizontes de tempo muitas vezes curtos (4 a 6 meses). Esta ´
+caracter´ıstica ocorre pelo fato de mesmo com entradas diferentes no modelo (por exemplo afluencia mais alta nos primeiros 3 meses do horizonte modelado), o NEWAVE ˆ
+acaba convergindo o resultado para um otimo comum. Este fato n ´ ao˜ e verdade quando ´
+sao analisados choques permanentes dentro da janela temporal considerada na mode- ˜
+lagem. Este fato sera descrito mais a frente nos casos de sensibilidades tratados no ´
+modelo.
+2.5.2 Estudo de Caso: Revers ˜ao `a M ´edia da Simula¸c ˜ao pelo NEWAVE
+Uma simulac¸ao feita com o NEWAVE na data 15/07/2016 para prec¸os a partir do ano ˜
+de 2017 foi feita com base em tres cen ˆ arios com premissas distintas: ´
+• Cen´ario Base: ENA no Sudeste e Sul em dezembro de 2017 de 95% da MLT e
+Energia armazenada no SIN em 30% do total;
+23
+• Cen´ario Pessimista: ENA no Sudeste e Sul em dezembro de 2017 de 80% da MLT
+e Energia armazenada no SIN em 27% do total;
+• Cen´ario Otimista: ENA no Sudeste e Sul em dezembro de 2017 110% da MLT e
+Energia armazenada no SIN em 33% do total.
+O resultado da simulac¸ao pode ser visto na figura 2.12 e dois aspectos podem ser ˜
+observados:
+Figura 2.12: Rodada NEWAVE com Trˆes Cen´arios
+i Ha uma converg ´ encia dos prec¸os nos tr ˆ es cen ˆ arios de hidrologia e da situac¸ ´ ao dos ˜
+reservatorios para n ´ ´ıveis estaveis quando se analisa os prec¸os muitos meses ´ a frente `
+do mes inicial de simulac¸ ˆ ao; ˜
+ii Como ainda ha uma sobreoferta estrutural de energia no sistema, visto que a ´
+expansao foi planejada sem levar em conta a recess ˜ ao econ ˜ omica dos anos de ˆ
+2015 e 2016, os prec¸os simulados para 2018 e 2019 ficam em patamares mais baixos. A relac¸ao carga/oferta de energia passa a impactar mais os prec¸os quando ˜
+a tendencia hidrol ˆ ogica converge para a m ´ edia e se projetam reservat ´ orios com ´
+n´ıveis de armazenamento muito mais estaveis operativamente. ´
+Uma questao latente dessa revers ˜ ao˜ a m` edia resultante da simulac¸ ´ ao utilizada para ˜
+a gerac¸ao de prec¸os ˜ e se: historicamente o PLD reverte ou n ´ ao a m ˜ edia. Caso n ´ ao haja ˜
+reversao a m ˜ edia, an ´ alises com um horizonte mais longo feitas atrav ´ es do NEWAVE ´
+podem ser de certa maneira refutadas visto que a realizac¸ao ao longo do tempo n ˜ ao˜
+corresponde a sa ` ´ıda do modelo.
+24
+2.5.3 Movimento Browniano Geom´etrico e Teste de Revers˜ao `a
+M´edia
+O movimento browniano (processo de wiener) e um processo estoc ´ astico cont ´ ´ınuo utilizado na modelagem de diferentes tipos de variaveis com variac¸ ´ oes estoc ˜ asticas ao ´
+longo do tempo. E um processo an ´ alogo ao ´ random walk em tempo cont´ınuo e possui
+tres caracter ˆ ´ısticas importantes:
+i E um processo de Markov; ´
+ii Possui incrementos independentes;
+iii Mudanc¸as em um intervalo finito no tempo do processo possuem distribuic¸ao nor- ˜
+mal.
+Um incremento infinitesimal de um processo browniano em tempo cont´ınuo possui
+a seguinte formulac¸ao: ˜
+dzt = t
+√
+dt ,em que  ∼ N(0, 1) (2.2)
+O incremento z(t) ∼ N(0, t), sendo nao estacion ˜ ario e com vari ´ ancia explosiva. A ˆ
+equac¸ao (2.2) pode ser generalizada por um movimento browniano com presenc¸a de ˜
+drift:
+dxt = αdt + σdzt (2.3)
+em que, dxt ∼ N(αdt
+, σ2dt).
+Um caso particular da generalizac¸ao descrita na equac¸ ˜ ao (2.3) ˜ e o Movimento Brow- ´
+niano Geometrico: ´
+dxt = αxtdt + σxtdzt (2.4)
+A fim de estimar parametros do Movimento Browniano Geom ˆ etrico para uma ´
+observac¸ao˜ e necess ´ ario a discretizac¸ ´ ao j ˜ a que os dados das amostras encontram-se ´
+em tempo discreto. Essa transformac¸ao em tempo discreto ˜ e a seguinte: ´
+ln xt+1 − ln xt =
+
+α −
+1
+2
+σ
+2
+
+dt + σ (zt+1 − zt) (2.5)
+ln xt+1
+ln xt
+= µ
+∗ + σet (2.6)
+em que:
+25
+• zt ∼ N(0, t);
+• et ∼ N(0, 1).
+2.5.4 Teste de Raiz Unit´aria
+Dada uma serie de prec¸os, testes comumente empregados para discernir se a s ´ erie ´ e´
+melhor modelada por Movimentos Brownianos ou por Processos de Reversao˜ a m` edia ´
+sao os testes de raiz unit ˜ aria. ´ E importante salientar que apesar de a teoria econ ´ omica ˆ
+muitas vezes conseguir descrever melhor processos por reversao˜ a m` edia, dificilmente ´
+ha rejeic¸ ´ ao da hip ˜ otese de ´ random walk. Um teste de raiz unitaria bastante utilizado ´ e o´
+teste de Dickey-Fuller que partindo de uma equac¸ao˜
+yt = αyt−1 + µt (2.7)
+tem como hipotese nula: ´
+H0 : α = 1
+Utilizando a serie de prec¸os do PLD do submercado SE/CO descrita graficamente ´
+pela 2.9, fez-se o teste de Dickey-Fuller aumentado no software EViews e o resultado
+esta descrito na tabela 2.4. A hip ´ otese nula ´ e rejeitada para os tr ´ es n ˆ ´ıveis de significancia (1%, 5% e 10%). ˆ
+Tabela 2.4: Teste Dickey-Fuller Aumentado: S´erie PLD SE/CO
+Corrobora ao resultado do teste da raiz unitaria para hist ´ orico do PLD o fato de que ´
+o correlograma dos prec¸os nao apresenta uma tend ˜ encia definida (n ˆ ao h ˜ a decaimento ´
+nem crescimento das correlac¸oes) o que ˜ e outro indicativo da refutac¸ ´ ao da ˜ H0 : α = 1
+como pode ser visto na figura 2.13.
+26
+Figura 2.13: Correlograma: S´erie PLD SE/CO
+2.5.5 Modelagem final do PLD
+E importante ressaltar que a determinac¸ ´ ao do prec¸o ˜ spot no mercado de energia eletrica ´
+brasileiro e uma sa ´ ´ıda dos modelos oficiais. Diferente de outras commodities que temˆ
+seus prec¸os determinados por diversos fatores nao fundamentais como por exemplo a ˜
+posic¸ao t ˜ ecnica dos ´ players do mercado, o PLD e resultado dos modelos que por ´ ultima ´
+instancia dependem de vari ˆ aveis end ´ ogenas, como por exemplo oferta e demanda ´
+de energia, afluencia, n ˆ ´ıvel dos reservatorios, entre outros. Como estas vari ´ aveis e ´
+o proprio modelo s ´ ao fornecidos ao mercado e s ˜ ao os determinantes do PLD a melhor ˜
+estimativa de tendencia para avaliac¸ ˆ ao de risco ˜ e o pr ´ oprio modelo. As vari ´ aveis s ´ ao˜
+semanalmente e mensalmente revisadas pelo ONS, o que faz com os resultados dos
+modelos mudem dinamicamente, ou seja, rodadas com um mes de diferenc¸a entre si ˆ
+usando os novos input oficiais darao um resultado diferente entre si. ˜
+27
+O presente trabalho ira usar 6 diferentes sensibilidades dos principais inputs para ´
+que sejam capturadas tendencia e dispers ˆ ao para uma melhor avaliac¸ ˜ ao do risco. Uma ˜
+forma diferente de tratar o problema, seria fazer uma previsao din ˜ amica destas prin- ˆ
+cipais variaveis e rodar o NEWAVE de forma encadeada, ou seja, a sa ´ ´ıda de uma previsao fora do modelo (por exemplo fazer uma previs ˜ ao da aflu ˜ encia futura diferente ˆ
+da previsao oficial) se tornaria a premissa do modelo no m ˜ es seguinte da rodada consi- ˆ
+derada. O NEWAVE seria, entao, rodado novamente com estas novas premissas. Al ˜ em´
+de altamente complexa esta an ´ alise, computacionalmente seria muito ineficiente. Para ´
+exemplificac¸ao da complexidade computacional, uma rodada do NEWAVE leva em ˜
+media mais de 1 hora, utilizando um computador com diversos processadores em pa- ´
+ralelo.
