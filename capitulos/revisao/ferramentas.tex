@@ -1,11 +1,19 @@
-\subsection*{JuMP}
+\section{Ferramentas Computacionais}
+\label{sec:ferramentas}
 
-JuMP (Julia for Mathematical Programming) é um ambiente de modelagem de código aberto para otimização matemática em Julia. Ele permite que os usuários formulem problemas de otimização de forma expressiva e de alto nível, com suporte a diferentes tipos de problemas (programação linear, inteira, quadrática, não linear, etc.) e a uma vasta gama de solucionadores (solvers) comerciais e open-source. JuMP se destaca por sua flexibilidade, performance e pela integração com a linguagem Julia, que combina a facilidade de uso de linguagens de script com a velocidade de linguagens compiladas. A capacidade de estender o JuMP com pacotes adicionais, como o HiGHS para problemas lineares e inteiros, o torna uma ferramenta poderosa para pesquisa e aplicações práticas em otimização (Lubin et al., 2023).
+A implementação dos modelos deste trabalho utiliza três ferramentas principais: o ambiente de modelagem JuMP, o pacote SDDP.jl e o solver HiGHS, todos integrados à linguagem Julia.
 
-\subsection*{SDDP.jl}
+\subsection{JuMP}
+\label{subsec:jump}
 
-SDDP.jl é um pacote em Julia que implementa a Programação Dinâmica Dual Estocástica (PDDE) de forma eficiente e flexível. Desenvolvido sobre o JuMP, ele facilita a modelagem e a resolução de problemas de programação estocástica multiestágio que possuem a estrutura de um grafo de política. SDDP.jl abstrai muitos dos detalhes complexos da implementação da PDDE, como a geração e o gerenciamento de cortes de Benders, permitindo que os usuários se concentrem na formulação do problema. Ele oferece suporte a uma ampla gama de funcionalidades, incluindo a capacidade de lidar com diferentes distribuições de incerteza e a integração com vários solucionadores. A utilização de SDDP.jl tem sido fundamental para avançar a pesquisa e a aplicação da PDDE em problemas reais, como o planejamento de sistemas de energia e gestão de portfólio (Dowson e Kapelevich, 2021).
+JuMP (\emph{Julia for Mathematical Programming}) é um ambiente de modelagem algébrica para otimização matemática em Julia, de código aberto. Ele permite formular problemas de programação linear, inteira mista, quadrática e não linear de forma declarativa, e delegar a resolução a diferentes solvers sem alteração do código de modelagem. \citeonline{lubin2023} descrevem a arquitetura do JuMP 1.0, suas garantias de interface com solvers e as melhorias de desempenho introduzidas na versão atual.
 
-\subsection*{HiGHS}
+\subsection{SDDP.jl}
+\label{subsec:sddp_jl}
 
-HiGHS (High-performance Gurobi-like Heuristic Solver) é um resolvedor (solver) de otimização de código aberto para problemas de programação linear (LP), programação inteira mista (MIP) e programação quadrática (QP). Ele é conhecido por sua alta performance e robustez, sendo uma alternativa eficiente para solucionadores comerciais em muitas aplicações. HiGHS pode ser facilmente integrado com ambientes de modelagem como JuMP, proporcionando uma solução completa e de alto desempenho para problemas de otimização. Sua utilização em conjunto com JuMP e SDDP.jl permite a resolução de problemas de programação estocástica multiestágio com eficiência e escalabilidade, tornando-o uma escolha valiosa para este trabalho.
+SDDP.jl é um pacote Julia que implementa a PDDE sobre o JuMP. O pacote estrutura o problema como um grafo de política e gerencia a geração e o armazenamento dos cortes de Benders, os passes \textit{forward} e \textit{backward} e o cálculo dos limites de convergência. \citeonline{dowson2021} descrevem a arquitetura do pacote e sua aplicação a problemas de planejamento de sistemas de energia.
+
+\subsection{HiGHS}
+\label{subsec:highs}
+
+HiGHS é um solver de código aberto para programação linear e inteira mista, desenvolvido na Universidade de Edinburgh. Ele implementa o método simplex revisado e o método de pontos interiores, e é acessível diretamente pelo JuMP e pelo SDDP.jl. Sua disponibilidade como software livre o torna uma alternativa viável para pesquisa em otimização sem dependência de licenças comerciais.

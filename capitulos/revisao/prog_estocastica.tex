@@ -1,9 +1,16 @@
-\subsection*{Conceitos Fundamentais}
+\section{Programação Estocástica Multiestágio}
+\label{sec:prog_estocastica}
 
-A Programação Estocástica (PE) é uma área da otimização matemática que lida com problemas de decisão sob incerteza, onde alguns parâmetros do modelo são variáveis aleatórias. Diferentemente da programação determinística, que assume que todos os dados são conhecidos com certeza, a PE busca soluções que são robustas a diferentes realizações das incertezas. A abordagem mais comum envolve a modelagem da incerteza através de cenários discretos, com probabilidades associadas, formando uma árvore ou um grafo de cenários que representa a evolução temporal das variáveis aleatórias (Birge e Louveaux, 2011).
+A Programação Estocástica (PE) é o ramo da otimização matemática que trata problemas de decisão em que parte dos parâmetros do modelo é incerta no momento da decisão. A incerteza é representada por variáveis aleatórias, e o objetivo é encontrar uma política que seja ótima em valor esperado — ou em outro critério de risco — sobre a distribuição dessas variáveis \cite{birge2011}.
 
-\subsection*{Programação Estocástica Multiestágio}
+\subsection{Formulação Multiestágio e Não Antecipatividade}
+\label{subsec:multistagio}
 
-Em muitos problemas práticos, as decisões são tomadas sequencialmente ao longo do tempo, e as incertezas se revelam gradualmente. Esse tipo de problema é modelado pela Programação Estocástica Multiestágio (PEM), onde as decisões em cada estágio dependem das informações disponíveis até aquele momento. A característica fundamental da PEM é a não antecipatividade, que garante que as decisões tomadas em um determinado estágio não podem ser influenciadas por informações futuras que ainda não foram reveladas. Isso reflete a realidade da tomada de decisão em tempo real, onde não se tem acesso ao futuro completo (Shapiro, Dentcheva e Ruszczyński, 2009).
+Em muitos problemas práticos, as decisões são tomadas sequencialmente e as incertezas se revelam de forma progressiva. A Programação Estocástica Multiestágio (PEM) modela essa estrutura temporal: em cada estágio $t$, a decisão é tomada com base nas informações disponíveis até aquele momento, sem acesso a realizações futuras das variáveis aleatórias. Essa propriedade é denominada \emph{não antecipatividade} e é uma restrição fundamental da PEM \cite{shapiro2009}.
 
-Problemas de PEM podem ser formulados como problemas de otimização de larga escala, especialmente quando o número de estágios e cenários é grande. A representação explícita de todos os cenários pode levar a um problema determinístico equivalente (DEQ) com um número proibitivo de variáveis e restrições. Para contornar essa dificuldade, técnicas de decomposição são frequentemente empregadas, explorando a estrutura temporal do problema para resolvê-lo em etapas menores e interconectadas. Isso é particularmente relevante em domínios como finanças, gestão de portfólio e energia, onde as decisões são sequenciais e as incertezas são intrínsecas ao ambiente.
+A incerteza é tipicamente representada por uma árvore de cenários, na qual cada nó corresponde a uma realização observável das variáveis aleatórias e cada ramo representa uma transição probabilística entre estágios. A formulação determinística equivalente (DEQ) constrói explicitamente essa árvore e resolve o problema resultante como um único programa linear. O tamanho do DEQ cresce exponencialmente com o número de estágios e ramificações, tornando-o inviável para instâncias com horizontes longos ou alta discretização das incertezas \cite{birge2011}.
+
+\subsection{Técnicas de Decomposição}
+\label{subsec:decomposicao}
+
+Para contornar a explosão combinatória da DEQ, técnicas de decomposição exploram a estrutura temporal do problema para resolvê-lo por estágios. A decomposição de Benders e suas variantes são as abordagens mais utilizadas nesse contexto \cite{shapiro2009}. A Programação Dinâmica Dual Estocástica, descrita na Seção~\ref{sec:pdde_literatura}, é a técnica de decomposição adotada neste trabalho.

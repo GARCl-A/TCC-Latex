@@ -1,11 +1,28 @@
-\subsection*{Conceito e Histórico}
+\section{Programação Dinâmica Dual Estocástica}
+\label{sec:pdde_literatura}
 
-A Programação Dinâmica Dual Estocástica (PDDE), ou Stochastic Dual Dynamic Programming (SDDP), é uma técnica de decomposição amplamente utilizada para resolver problemas de Programação Estocástica Multiestágio de grande porte, especialmente aqueles com estrutura de incerteza em árvore ou grafo. A PDDE foi introduzida por Pereira e Pinto (1991) e, desde então, tem sido aplicada com sucesso em diversas áreas, com destaque para o planejamento de sistemas de energia elétrica. Sua principal vantagem é a capacidade de evitar a construção explícita de toda a árvore de cenários, o que se torna computacionalmente inviável para problemas com muitos estágios e ramificações. Em vez disso, a PDDE aproxima as funções de custo futuro por meio de cortes de Benders, gerados iterativamente.
+A Programação Dinâmica Dual Estocástica (PDDE), conhecida na literatura internacional por \emph{Stochastic Dual Dynamic Programming} (SDDP), é um método de decomposição para problemas de Programação Estocástica Multiestágio introduzido por \citeonline{pereira1991}. O método foi desenvolvido originalmente para o planejamento de operação de sistemas hidrotérmicos e, desde então, tem sido estendido a outros domínios com estrutura multiestágio \cite{dowson2021}.
 
-\subsection*{Funcionamento da PDDE}
+\subsection{Aproximação da Função de Valor por Cortes de Benders}
+\label{subsec:cortes_benders}
 
-A PDDE opera em um processo iterativo que alterna entre duas etapas principais: forward (para frente) e backward (para trás). Na etapa forward, o modelo simula trajetórias de cenários, tomando decisões em cada estágio com base nas informações disponíveis e nas aproximações das funções de custo futuro. Isso permite a identificação de estados visitados e a coleta de informações sobre o desempenho da política atual. Na etapa backward, o processo percorre os estágios em ordem reversa. Em cada estágio e para cada estado visitado na etapa forward, um subproblema é resolvido, e as soluções duais desses subproblemas são utilizadas para gerar cortes de Benders. Esses cortes são então adicionados às funções de custo futuro dos estágios anteriores, refinando suas aproximações e melhorando a qualidade das decisões na próxima iteração forward. O processo continua até que a diferença entre os limites inferior e superior da função objetivo seja suficientemente pequena, garantindo a convergência para a solução ótima.
+A PDDE evita a construção explícita da árvore de cenários ao substituir a função de valor futuro $V_{t+1}(\cdot)$, desconhecida em forma fechada, por uma aproximação linear por partes $\hat{V}_{t+1}(\cdot)$ construída iterativamente. Cada iteração acrescenta um hiperplano de suporte — denominado \emph{corte de Benders} — que preserva a concavidade da aproximação e a torna progressivamente mais precisa \cite{pereira1991}.
 
-\subsection*{Vantagens e Aplicações}
+\subsection{Etapas \textit{Forward} e \textit{Backward}}
+\label{subsec:forward_backward_rev}
 
-A principal vantagem da PDDE reside em sua capacidade de lidar com a maldição da dimensionalidade, permitindo a solução de problemas com um número muito maior de estágios e cenários do que seria possível com a formulação determinística equivalente. Isso a torna particularmente adequada para aplicações em sistemas de energia, gestão de recursos hídricos, planejamento financeiro e gestão de portfólios, onde a natureza multiestágio e as incertezas são fatores dominantes. A evolução de pacotes computacionais como SDDP.jl (Dowson e Kapelevich, 2021) tem facilitado a implementação e a aplicação da PDDE, tornando-a uma ferramenta acessível e eficiente para pesquisadores e profissionais.
+A PDDE opera em iterações que alternam duas etapas:
+
+\begin{itemize}
+  \item \textbf{Etapa \textit{forward}:} a política corrente é simulada em trajetórias de cenários. Em cada estágio, resolve-se o subproblema com a aproximação disponível de $V_{t+1}$, coletando os estados visitados e produzindo uma estimativa do valor esperado da política (limite superior estocástico).
+  \item \textbf{Etapa \textit{backward}:} os estágios são percorridos em ordem reversa. Para cada estado visitado na etapa \textit{forward}, resolve-se o subproblema e utilizam-se as soluções duais para gerar novos cortes de Benders, refinando $\hat{V}_t(\cdot)$ e elevando o limite inferior do valor ótimo.
+\end{itemize}
+
+O algoritmo termina quando a diferença entre o limite superior e o limite inferior é inferior a uma tolerância predefinida \cite{pereira1991,shapiro2009}.
+
+\subsection{Vantagens e Limitações}
+\label{subsec:vantagens_pdde}
+
+A principal vantagem computacional da PDDE é que o tamanho de cada subproblema de estágio é independente do número total de estágios e cenários, crescendo apenas com a dimensão do vetor de estado. Isso contrasta com a DEQ, cujo tamanho cresce exponencialmente com o horizonte \cite{pereira1991}. Contudo, a complexidade dos subproblemas aumenta com o número de variáveis de estado, o que pode representar uma limitação em problemas com espaços de estado de alta dimensão \cite{shapiro2009}.
+
+O desenvolvimento do pacote \texttt{SDDP.jl} \cite{dowson2021} facilitou a aplicação do método a novos domínios, abstraindo os detalhes de implementação dos cortes de Benders e da estrutura de grafo de política.
