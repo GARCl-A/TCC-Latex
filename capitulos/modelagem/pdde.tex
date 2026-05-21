@@ -83,7 +83,7 @@ O estado da comercializadora no in\'icio do est\'agio $t$ \'e representado pelo 
   \label{eq:vetor_estado}
 \end{equation}
 %
-onde $x_t$ \'e o saldo de caixa acumulado, $v_t$ re\'une as posi\c{c}\~oes f\'isicas l\'iquidas ainda ativas na carteira e $c_t$ re\'une os fluxos financeiros associados a esses contratos. As decis\~oes do est\'agio s\~ao os volumes de compra e venda $q_t = (q^B_t, q^S_t)$, definidos antes da realiza\c{c}\~ao das incertezas $\omega_t = (P_{s,t,\omega}, G_{s,t,\omega})_{s \in \mathcal{S}}$.
+onde $x_t$ \'e o saldo de caixa acumulado, $v_t$ re\'une as posi\c{c}\~oes f\'isicas l\'iquidas ainda ativas na carteira e $c_t$ re\'une os fluxos financeiros associados a esses contratos. As decis\~oes do est\'agio s\~ao os volumes de compra e venda $q_t = (q^B_t, q^S_t)$, definidos antes da realiza\c{c}\~ao das incertezas $\omega_t = (P_{s,t}, G_{s,t})_{s \in \mathcal{S}}$, onde $P_{s,t}$ \'e o PLD e $G_{s,t}$ a gera\c{c}\~ao f\'isica do submercado $s$ no est\'agio $t$.
 
 A din\^amica do sistema \'e descrita pela equa\c{c}\~ao de transi\c{c}\~ao de estados:
 %
@@ -92,13 +92,14 @@ A din\^amica do sistema \'e descrita pela equa\c{c}\~ao de transi\c{c}\~ao de es
   \label{eq:transicao_estado}
 \end{equation}
 %
-onde $T_t(\cdot)$ agrega as equa\c{c}\~oes de atualiza\c{c}\~ao da mem\'oria f\'isica da carteira, da mem\'oria financeira dos contratos vigentes e do saldo de caixa, de forma an\'aloga \`as equa\c{c}\~oes \eqref{eq:volume_fisico}--\eqref{eq:transicao_caixa} do DEQ. O resultado econ\^omico imediato do est\'agio \'e:
+onde $T_t(\cdot)$ agrega as equa\c{c}\~oes de atualiza\c{c}\~ao da mem\'oria f\'isica da carteira, da mem\'oria financeira dos contratos vigentes e do saldo de caixa, de forma an\'aloga \`as equa\c{c}\~oes \eqref{eq:volume_fisico}--\eqref{eq:transicao_caixa} do DEQ. O resultado econ\^omico imediato apurado no n\'o de liquida\c{c}\~ao $(t, c)$ \'e a varia\c{c}\~ao de caixa descontada da penalidade:
 %
 \begin{equation}
-  f_t(y_t, q_t, \omega_t) - M\,\delta_{t,\omega},
+  f_t(y_t, q_t, \omega_t) - M\,\delta_{t,\omega}
+  \;\triangleq\; (x_{t+1} - x_t) - M\,\delta_{t,\omega},
 \end{equation}
 %
-onde $\delta_{t,\omega} \geq 0$ \'e a vari\'avel de folga da restri\c{c}\~ao de cr\'edito $x_{t+1} + \delta_{t,\omega} \geq L^{\text{cred}}$.
+onde $x_{t+1}$ \'e dado pela equa\c{c}\~ao de transi\c{c}\~ao~\eqref{eq:transicao_caixa} e $\delta_{t,\omega} \geq 0$ \'e a vari\'avel de folga da restri\c{c}\~ao de cr\'edito $x_{t+1} + \delta_{t,\omega} \geq L^{\text{cred}}$.
 
 \subsection{Fun\c{c}\~ao de Valor e Aproxima\c{c}\~ao por Cortes}
 \label{subsec:funcao_valor}
@@ -117,10 +118,4 @@ onde $\mathcal{Q}_t(y_t)$ \'e o conjunto de decis\~oes fact\'iveis. Na pr\'atica
 \subsection{Algoritmo: Etapas \textit{Forward} e \textit{Backward}}
 \label{subsec:forward_backward}
 
-A PDDE resolve o problema de forma iterativa, alternando duas etapas principais:
-
-\paragraph{Etapa \textit{Forward}.} A pol\'itica corrente \'e simulada ao longo de trajet\'orias de cen\'arios, come\c{c}ando do estado inicial $y_1$ e avan\c{c}ando no tempo. Em cada est\'agio $t$, resolve-se o subproblema com a melhor aproxima\c{c}\~ao dispon\'ivel de $V_{t+1}$, obtendo-se as decis\~oes \'otimas, os estados visitados e uma estimativa do desempenho da pol\'itica atual (limite superior estoc\'astico).
-
-\paragraph{Etapa \textit{Backward}.} Percorrem-se os est\'agios em ordem reversa, resolvendo subproblemas nos estados visitados durante a etapa \textit{forward}. Com as solu\c{c}\~oes duais desses subproblemas, constroem-se novos cortes de Benders que refinam a aproxima\c{c}\~ao $\hat{V}_t(\cdot)$ para os est\'agios anteriores, elevando o limite inferior do valor \'otimo.
-
-O processo itera at\'e que a diferen\c{c}a entre o limite superior (simulado) e o limite inferior (calculado pelo \textit{bound}) seja suficientemente pequena, ou at\'e que um crit\'erio de parada por estagna\c{c}\~ao do \textit{bound} seja atingido \cite{pereira1991}. A principal vantagem em rela\c{c}\~ao ao DEQ \'e que o tamanho de cada subproblema \'e independente do n\'umero de est\'agios e cen\'arios: cresce apenas com a dimens\~ao do vetor de estado, tornando a PDDE escal\'avel para horizontes longos e \'arvores de grande porte.
+Na etapa \textit{forward}, simula-se a pol\'itica corrente sobre trajet\'orias de realiza\c{c}\~oes $\omega_t$ (PLD e gera\c{c}\~ao f\'isica), registrando os estados visitados $y_t$ e estimando o desempenho da pol\'itica (limite inferior $\underline{z}$). Na etapa \textit{backward}, resolvem-se os subproblemas nos estados visitados e extraem-se as vari\'aveis duais das restri\c{c}\~oes de transi\c{c}\~ao de estado para construir cortes que reduzem a aproxima\c{c}\~ao $\hat{V}_t(\cdot)$ em dire\c{c}\~ao ao valor \'otimo (limite superior $\bar{z}$). O processo itera at\'e $\bar{z} \approx \underline{z}$ --- na conven\c{c}\~ao de maximiza\c{c}\~ao adotada, $\bar{z}$ \'e o limite superior dado pelos cortes e $\underline{z}$ o limite inferior dado pela simula\c{c}\~ao, cf.\ Se\c{c}\~ao~\ref{subsec:algoritmo_sddp} \cite{pereira1991}. Na implementa\c{c}\~ao deste trabalho, o algoritmo executa no m\'aximo 50 itera\c{c}\~oes ou encerra antecipadamente se $\bar{z}$ n\~ao se reduz em mais de $10^{-6}$ ao longo de 100 itera\c{c}\~oes consecutivas (\texttt{BoundStalling}). A principal vantagem em rela\c{c}\~ao ao DEQ \'e que o tamanho de cada subproblema cresce apenas com a dimens\~ao do vetor de estado $y_t$, tornando a PDDE escal\'avel para horizontes longos e \'arvores de grande porte.

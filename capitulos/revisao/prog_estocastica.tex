@@ -1,7 +1,7 @@
 \section{Programação Estocástica Multiestágio}
 \label{sec:prog_estocastica}
 
-A Programação Estocástica (PE) é o ramo da otimização matemática que trata problemas de decisão em que parte dos parâmetros do modelo é incerta no momento da decisão. A incerteza é representada por variáveis aleatórias, e o objetivo é encontrar uma política que seja ótima em valor esperado — ou em outro critério de risco — sobre a distribuição dessas variáveis \cite{birge2011}.
+A Programação Estocástica (PE) é o ramo da otimização matemática que trata problemas de decisão em que parte dos parâmetros do modelo é incerta no momento da decisão. A incerteza é representada por variáveis aleatórias, e o objetivo é encontrar uma política que seja ótima em valor esperado --- ou em outro critério de risco --- sobre a distribuição dessas variáveis \cite{birge2011}.
 
 \subsection{Formulação Multiestágio e Não Antecipatividade}
 \label{subsec:multistagio}
@@ -48,7 +48,7 @@ Dados $R$ ramos por estágio e $T$ estágios, o número de nós na árvore cresc
   N = \sum_{t=0}^{T} R^t = \frac{R^{T+1} - 1}{R - 1} = O(R^T),
   \label{eq:crescimento_deq}
 \end{equation}
-tornando o DEQ inviável para instâncias com horizontes longos ou alta discretização das incertezas \cite{birge2011}. No presente trabalho, com $R = 7$ ramos por estágio e $T = 6$ meses, a árvore possui $N = 137\,257$ nós, o que ainda é tratável mas está próximo do limite prático para solução direta como LP.
+tornando o DEQ inviável para instâncias com horizontes longos ou alta discretização das incertezas \cite{birge2011}.
 
 \subsection{Técnicas de Decomposição}
 \label{subsec:decomposicao}
@@ -56,3 +56,5 @@ tornando o DEQ inviável para instâncias com horizontes longos ou alta discreti
 Para contornar a explosão combinatória da DEQ, técnicas de decomposição exploram a estrutura temporal do problema para resolvê-lo estágio a estágio. A decomposição de Benders e suas variantes são as abordagens mais utilizadas nesse contexto \cite{shapiro2009,birge2011}. A ideia central é representar implicitamente a função de custo futuro $\mathbb{E}[V_{t+1}(\cdot)]$ por uma aproximação construída iterativamente, evitando a enumeração explícita de todos os cenários futuros.
 
 A Programação Dinâmica Dual Estocástica, descrita na Seção~\ref{sec:pdde_literatura}, é a técnica de decomposição adotada neste trabalho como alternativa escalável à DEQ, especialmente adequada para problemas lineares com estrutura multiestágio e número elevado de estágios ou cenários.
+
+As referências desta seção adotam a convenção de \emph{minimização de custo}; neste trabalho utiliza-se \emph{maximização de resultado financeiro}, convenção matematicamente equivalente e suportada nativamente pelo \texttt{SDDP.jl} \cite{dowson2021} --- a implicação sobre os limites $\underline{z}$ e $\bar{z}$ é discutida na Seção~\ref{subsec:algoritmo_sddp}.

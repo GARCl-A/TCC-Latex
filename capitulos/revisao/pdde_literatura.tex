@@ -6,7 +6,7 @@ A Programação Dinâmica Dual Estocástica (PDDE), conhecida na literatura inte
 \subsection{Aproximação da Função de Valor por Cortes de Benders}
 \label{subsec:cortes_benders}
 
-A PDDE evita a construção explícita da árvore de cenários ao substituir a função de custo futuro $\mathcal{Q}_{t+1}(s_t) \triangleq \mathbb{E}_{\xi_{t+1}}[V_{t+1}(s_t, \xi_{t+1})]$, desconhecida em forma fechada, por uma aproximação linear por partes $\hat{\mathcal{Q}}_{t+1}(\cdot)$ construída iterativamente. Cada iteração acrescenta um hiperplano de suporte — denominado \emph{corte de Benders} — que preserva a concavidade da aproximação e a torna progressivamente mais apertada por baixo \cite{pereira1991}.
+A PDDE evita a construção explícita da árvore de cenários ao substituir a função de custo futuro $\mathcal{Q}_{t+1}(s_t) \triangleq \mathbb{E}_{\xi_{t+1}}[V_{t+1}(s_t, \xi_{t+1})]$, desconhecida em forma fechada, por uma aproximação linear por partes $\hat{\mathcal{Q}}_{t+1}(\cdot)$ construída iterativamente. Cada iteração acrescenta um hiperplano de suporte --- denominado \emph{corte de Benders} --- que preserva a convexidade da aproximação e a torna progressivamente mais apertada por baixo \cite{pereira1991}.
 
 Dado um estado $\bar{s}_t$ visitado durante uma iteração, o corte de Benders é gerado a partir das variáveis duais do subproblema de estágio $t+1$. Se $\pi^*$ denota o vetor de variáveis duais associadas às restrições de transição de estado avaliadas em $\bar{s}_t$, e $\theta^*$ o valor ótimo do subproblema nesse ponto, o corte acrescentado a $\hat{\mathcal{Q}}_t$ é:
 \begin{equation}
@@ -16,13 +16,15 @@ Dado um estado $\bar{s}_t$ visitado durante uma iteração, o corte de Benders �
 
 A acumulação de cortes ao longo das iterações garante que $\hat{\mathcal{Q}}_t \leq \mathcal{Q}_t$ (aproximação por baixo), e que o subproblema de cada estágio permanece um programa linear de tamanho fixo, independente do número de cenários \cite{pereira1991,shapiro2009}.
 
+A formulação apresentada acima --- assim como as referências de \citeonline{pereira1991} e \citeonline{shapiro2009} --- adota a convenção de \emph{minimização de custo}, na qual a função de custo futuro $\mathcal{Q}_t$ é convexa e os cortes constituem limites inferiores ($\hat{\mathcal{Q}}_t \leq \mathcal{Q}_t$). Neste trabalho, o problema é formulado como \emph{maximização de resultado financeiro}: a função de valor futuro $V_t$ é côncava e os cortes de Benders são limites superiores ($\hat{V}_t \geq V_t$). As duas formulações são matematicamente equivalentes --- maximizar $f$ equivale a minimizar $-f$ --- e o \texttt{SDDP.jl} suporta nativamente problemas de maximização, de modo que a escolha da convenção é do modelador.
+
 \subsection{Algoritmo SDDP}
 \label{subsec:algoritmo_sddp}
 
 O algoritmo SDDP opera em iterações que alternam duas etapas: \textit{forward} e \textit{backward}. O pseudocódigo é apresentado no Algoritmo~\ref{alg:sddp}.
 
 \begin{algorithm}[H]
-\caption{SDDP (\emph{Stochastic Dual Dynamic Programming})}
+\caption{SDDP (\emph{Stochastic Dual Dynamic Programming}), apresentado na convenção de minimização de \citeonline{pereira1991}. A implementação deste trabalho utiliza maximização de resultado financeiro --- ver Seção~\ref{sec:pdde}.}
 \label{alg:sddp}
 \begin{algorithmic}[1]
   \State Inicializar $\hat{\mathcal{Q}}_t(\cdot) \leftarrow -\infty$ para todo $t$ (sem cortes)
@@ -51,27 +53,20 @@ O algoritmo SDDP opera em iterações que alternam duas etapas: \textit{forward}
 \end{algorithmic}
 \end{algorithm}
 
-O critério de parada compara um limite inferior determinístico $\underline{z}$ — valor do problema com os cortes acumulados — com um limite superior estocástico $\bar{z}$ — estimado por simulação das trajetórias \emph{forward}. Quando o intervalo de confiança de $\bar{z}$ inclui $\underline{z}$, a política corrente é considerada suficientemente próxima da ótima. A convergência do algoritmo — no sentido de que os cortes acumulados aproximam a função de valor ótima à medida que o número de iterações cresce — é analisada formalmente em \citeonline{shapiro2011}.
+O critério de parada compara um limite inferior determinístico $\underline{z}$ --- valor do problema com os cortes acumulados --- com um limite superior estocástico $\bar{z}$ --- estimado por simulação das trajetórias \emph{forward}. Quando o intervalo de confiança de $\bar{z}$ inclui $\underline{z}$, a política corrente é considerada suficientemente próxima da ótima. A convergência do algoritmo --- no sentido de que os cortes acumulados aproximam a função de valor ótima à medida que o número de iterações cresce --- é analisada formalmente em \citeonline{shapiro2011}.
 
-\subsection{Maldição da Dimensionalidade e Escalabilidade}
+Na formulação de minimização de \citeonline{pereira1991}, $\underline{z}$ é a cota inferior determinística (cortes acumulados) e $\bar{z}$ é a cota superior estocástica (simulação). Na formulação de maximização adotada neste trabalho, os papéis se invertem: $\bar{z}$ passa a ser o limite superior dado pela aproximação de Benders $\hat{V}_1(y_0)$, e $\underline{z}$ é o limite inferior dado pela simulação da política corrente. O critério de parada permanece o mesmo em ambas as convenções: o algoritmo encerra quando os dois limites são estatisticamente indistinguíveis.
+
+\subsection{Grafo de Política}
+\label{subsec:policy_graph}
+
+A implementação moderna do SDDP, tal como realizada pelo \texttt{SDDP.jl} \cite{dowson2021}, organiza o problema multiestágio por meio de uma estrutura denominada \emph{grafo de política} (\textit{policy graph}). Um grafo de política é um grafo dirigido acíclico (DAG) em que cada nó representa um subproblema de otimização de estágio e cada aresta representa uma transição probabilística entre estágios. O problema multiestágio é então resolvido por decomposição sobre esse grafo, em lugar de sobre a árvore de cenários inteira --- distinção que permite ao \texttt{SDDP.jl} tratar tanto cadeias lineares de estágios quanto estruturas mais gerais, como grafos com ramificações ou múltiplos nós por período \cite{dowson2021}.
+
+Em problemas onde a decisão precede a revelação da incerteza dentro do mesmo período, é conveniente decompor cada estágio em dois nós: um \emph{nó de decisão}, no qual as variáveis de controle são escolhidas antes de a incerteza ser observada, e um ou mais \emph{nós de liquidação}, nos quais a realização da incerteza é revelada e o resultado imediato é apurado. Esse padrão de modelagem --- um nó de decisão por período seguido de nós de realização --- é um recurso padrão do grafo de política no \texttt{SDDP.jl} e é adotado neste trabalho na formulação da PDDE, conforme descrito no Capítulo~\ref{cap:modelagem}.
+
+\subsection{Escalabilidade e Limitações}
 \label{subsec:maldição}
 
-A programação dinâmica clássica sofre da \emph{maldição da dimensionalidade}: representar a função de valor $V_t(\cdot)$ em uma grade discreta do espaço de estados requer espaço exponencial na dimensão do vetor de estado $s_t$ \cite{shapiro2009}. Para estados contínuos, a discretização exata é inviável mesmo para dimensões moderadas.
+A programação dinâmica clássica sofre da \emph{maldição da dimensionalidade}: representar a função de valor $V_t(\cdot)$ em uma grade discreta do espaço de estados requer espaço exponencial na dimensão do vetor de estado $s_t$ \cite{shapiro2009}. A PDDE supera esse problema ao representar $\hat{\mathcal{Q}}_t$ implicitamente por cortes de Benders, sem discretizar o espaço de estado: o tamanho de cada subproblema de estágio é independente de $T$ e do número de cenários, contrastando com o DEQ, cujo porte cresce como $O(R^T)$ conforme a equação~\eqref{eq:crescimento_deq} \cite{pereira1991}. Adicionalmente, a política obtida é válida para qualquer realização dos cenários, não apenas para os explicitados na árvore de treinamento.
 
-A PDDE supera esse problema ao representar $\hat{\mathcal{Q}}_t$ implicitamente por um conjunto de hiperplanos (os cortes de Benders), sem discretizar o espaço de estado. O tamanho de cada subproblema de estágio é independente do número de estágios $T$ e de cenários, crescendo apenas com a dimensão do vetor de estado $s_t$. Isso contrasta com o DEQ, cujo tamanho cresce exponencialmente com o horizonte conforme a equação~\eqref{eq:crescimento_deq} \cite{pereira1991}.
-
-A limitação principal da PDDE é a dependência linear em relação à dimensão do estado: problemas com muitas variáveis de estado requerem mais cortes para aproximar $\hat{\mathcal{Q}}_t$ adequadamente, aumentando o número de iterações necessárias para a convergência \cite{shapiro2009}.
-
-\subsection{Vantagens e Limitações}
-\label{subsec:vantagens_pdde}
-
-Em síntese, a PDDE apresenta as seguintes vantagens frente à DEQ:
-\begin{itemize}
-  \item O tamanho de cada subproblema de estágio é constante, independente de $T$ e do número de ramos;
-  \item A política obtida é válida para qualquer realização dos cenários, não apenas para os cenários explicitados na árvore;
-  \item A representação por cortes é naturalmente compatível com problemas lineares e convexos.
-\end{itemize}
-
-Por outro lado, a PDDE requer que o problema satisfaça condições de convexidade (programas lineares ou convexos), e a convergência pode ser lenta em problemas com espaços de estado de alta dimensão \cite{shapiro2009}. Adicionalmente, o limite superior estocástico é ruidoso por natureza, requerendo um número suficiente de trajetórias de simulação para estimar com precisão.
-
-O desenvolvimento do pacote \texttt{SDDP.jl} \cite{dowson2021} facilitou a aplicação do método a novos domínios, abstraindo os detalhes de implementação dos cortes de Benders e da estrutura de grafo de política, e é utilizado neste trabalho para a implementação da abordagem SDDP.
+A limitação principal é a exigência de convexidade (o método é restrito a programas lineares ou convexos) e a dependência linear na dimensão do estado: problemas com muitas variáveis de estado requerem mais cortes e mais iterações para convergir \cite{shapiro2009}. O limite superior estocástico $\bar{z}$ é ruidoso por natureza, exigindo um número suficiente de trajetórias de simulação na etapa \textit{forward} para estimá-lo com precisão.

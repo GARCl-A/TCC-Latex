@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\lucas\\\\OneDrive\\\\Área de Trabalho\\\\Projetos\\\\TCC-Latex\" -Recurse -Force)",
-      "Bash(Select-Object FullName)"
+      "Bash(Select-Object FullName)",
+      "Bash(python par1_tabela.py --tabela --latex)",
+      "Bash(python -c \"import sys; print\\(sys.executable\\)\")",
+      "Bash(where python *)",
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\lucas\\\\OneDrive\\\\Área de Trabalho\\\\Projetos\\\\TCC-Latex\\\\Context\\\\Referencias\\\\\" -Force)"
     ]
   }
 }

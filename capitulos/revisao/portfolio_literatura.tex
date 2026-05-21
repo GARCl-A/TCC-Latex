@@ -20,14 +20,14 @@ Se a posição líquida for superavitária (mais compra do que venda), o exceden
 \subsection{Incerteza e Decisões Sequenciais}
 \label{subsec:incerteza_portfolio}
 
-A incerteza sobre o PLD e sobre a geração física torna inadequada a abordagem determinística para esse problema: um modelo que utilize valores esperados das variáveis aleatórias tende a superestimar o valor das decisões e a subestimar o risco de exposição \cite{birge2011}. Em particular, a assimetria da distribuição do PLD — com picos pronunciados nos períodos secos — pode levar um modelo determinístico a subestimar sistematicamente o custo esperado de uma posição deficitária.
+A incerteza sobre o PLD e sobre a geração física torna inadequada a abordagem determinística para esse problema: um modelo que utilize valores esperados das variáveis aleatórias tende a superestimar o valor das decisões e a subestimar o risco de exposição \cite{birge2011}. Em particular, a assimetria da distribuição do PLD --- com picos pronunciados nos períodos secos --- pode levar um modelo determinístico a subestimar sistematicamente o custo esperado de uma posição deficitária.
 
-A Programação Estocástica Multiestágio, descrita na Seção~\ref{sec:prog_estocastica}, é a abordagem natural para incorporar essa incerteza de forma explícita, representando a evolução do PLD e da geração por uma árvore de cenários e obtendo uma política de contratação adaptativa: a decisão de cada estágio é condicionada ao histórico de realizações observadas, não a um único cenário determinístico \cite{birge2011}.
+A Programação Estocástica Multiestágio, descrita na Seção~\ref{sec:prog_estocastica}, é a abordagem adotada neste trabalho para tratar essa incerteza de forma explícita.
 
 \subsection{Estratégias de Hedge com Contratos Bilaterais}
 \label{subsec:hedge}
 
-O principal instrumento de \emph{hedge} disponível ao comercializador é o contrato bilateral a prazo, que fixa preço e volume de energia para entrega futura. Ao contratar antecipadamente um volume de compra, o agente elimina a incerteza de preço sobre esse volume — protegendo-se contra picos de PLD —, mas abre mão do ganho potencial caso o PLD caia abaixo do preço contratado. O nível ótimo de contratação depende, portanto, tanto das expectativas sobre o PLD quanto da aversão ao risco do agente \cite{bessa2006,pedrini2019}.
+O principal instrumento de \emph{hedge} disponível ao comercializador é o contrato bilateral a prazo, que fixa preço e volume de energia para entrega futura. Ao contratar antecipadamente um volume de compra, o agente elimina a incerteza de preço sobre esse volume --- protegendo-se contra picos de PLD ---, mas abre mão do ganho potencial caso o PLD caia abaixo do preço contratado. O nível ótimo de contratação depende, portanto, tanto das expectativas sobre o PLD quanto da aversão ao risco do agente \cite{bessa2006,pedrini2019}.
 
 Do ponto de vista da otimização, essa decisão é naturalmente multiestágio: em cada mês, o comercializador observa o estado atual do sistema (posição de contratos em vigor, PLD corrente, posição financeira) e decide quais contratos novos celebrar ou renovar para os meses seguintes. As decisões correntes afetam as opções disponíveis nos estágios futuros, caracterizando a interdependência temporal que motiva o uso de programação estocástica multiestágio \cite{guerreiro2017}.
 
@@ -39,3 +39,5 @@ Além do balanço físico entre contratos, geração e consumo, o problema de po
 A interdependência entre as decisões correntes e os compromissos financeiros futuros torna o problema inerentemente multiestágio: uma contratação realizada no mês $t$ modifica o espaço viável dos meses $t+1, \ldots, T$, ao comprometer recursos financeiros e alterar a posição física do portfólio.
 
 A aplicação de métodos de otimização estocástica ao planejamento integrado de comercialização de energia é discutida em \citeonline{bessa2006}, que descreve um sistema de apoio à decisão para comercializadoras no mercado brasileiro. \citeonline{guerreiro2017} aborda especificamente o problema de otimização de portfólio no ACL, enquanto \citeonline{pedrini2019} estende a formulação para consumidores livres com a possibilidade de contratar geração eólica.
+
+Quando os contratos bilaterais têm duração superior a um mês --- o que é usual no ACL, onde contratos anuais ou plurianuais são comuns --- a posição contratual do comercializador em cada mês carrega memória dos contratos firmados em períodos anteriores, ampliando o vetor de estado do problema de otimização conforme formalizado na Seção~\ref{sec:notacao} \cite{bessa2006,guerreiro2017}.

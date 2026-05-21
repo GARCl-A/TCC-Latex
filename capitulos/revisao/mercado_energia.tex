@@ -1,12 +1,12 @@
 \section{O Mercado de Energia Elétrica Brasileiro}
 \label{sec:mercado_energia}
 
-O setor elétrico brasileiro é caracterizado por uma matriz energética predominantemente hidrelétrica, o que o torna suscetível a variações hidrológicas \cite{mme2002}. A estrutura atual do mercado resulta de um processo de reestruturação consolidado pelo modelo institucional descrito em \cite{mme2002}, que segmentou a cadeia elétrica em geração, transmissão, distribuição e comercialização.
+O setor elétrico brasileiro é caracterizado por uma matriz energética predominantemente hidrelétrica, o que o torna suscetível a variações hidrológicas \cite{mme2002}. A estrutura atual do mercado resulta de um processo de reestruturação consolidado pelo modelo institucional de 2004 \cite{lei10848}, que segmentou a cadeia elétrica em geração, transmissão, distribuição e comercialização.
 
 \subsection{Sistema Interligado Nacional e Submercados}
 \label{subsec:sin_submercados}
 
-O Sistema Interligado Nacional (SIN) é a infraestrutura de transmissão que integra usinas geradoras e centros de carga em praticamente todo o território brasileiro. Por razões de capacidade e congestionamento nas linhas de transmissão, o SIN é dividido em quatro submercados regionais: Sudeste/Centro-Oeste (SE/CO), Sul (S), Nordeste (NE) e Norte (N). Cada submercado possui um preço de liquidação próprio, que pode divergir dos demais quando os limites de intercâmbio entre regiões são atingidos \cite{mme2002,ccee2024a}. A coordenação da operação é responsabilidade do Operador Nacional do Sistema Elétrico (ONS), que despacha os recursos de forma a minimizar o custo de operação respeitando as restrições físicas da rede.
+O Sistema Interligado Nacional (SIN) é a infraestrutura de transmissão que integra usinas geradoras e centros de carga em praticamente todo o território brasileiro. Por razões de capacidade e congestionamento nas linhas de transmissão, o SIN é dividido em quatro submercados regionais: Sudeste/Centro-Oeste (SE/CO), Sul (S), Nordeste (NE) e Norte (N). Cada submercado possui um preço de liquidação próprio, que pode divergir dos demais quando os limites de intercâmbio entre regiões são atingidos \cite{ccee2024a}. A coordenação da operação é responsabilidade do Operador Nacional do Sistema Elétrico (ONS), que despacha os recursos de forma a minimizar o custo de operação respeitando as restrições físicas da rede.
 
 \subsection{Estrutura e Agentes do Mercado}
 \label{subsec:estrutura_agentes}
@@ -26,7 +26,7 @@ A Câmara de Comercialização de Energia Elétrica (CCEE) é o órgão respons�
 \subsection{Preço de Liquidação das Diferenças}
 \label{subsec:pld}
 
-O Preço de Liquidação das Diferenças (PLD) é o preço de referência para a liquidação financeira das diferenças entre a energia contratada e a energia efetivamente gerada ou consumida. A CCEE calcula o PLD semanalmente para cada submercado, com base no Custo Marginal de Operação (CMO) obtido por dois modelos computacionais encadeados \cite{ccee2024a}:
+O Preço de Liquidação das Diferenças (PLD) é o preço de referência para a liquidação financeira das diferenças entre a energia contratada e a energia efetivamente gerada ou consumida. A CCEE calcula o PLD semanalmente para cada submercado, com base no Custo Marginal de Operação (CMO) obtido por dois modelos computacionais encadeados \cite{ccee2024a}. O CMO é a variável dual da restrição de balanço de energia no problema de despacho hidrotérmico, interpretado como o custo de suprir uma unidade adicional de demanda no instante considerado:
 
 \begin{itemize}
   \item \textbf{NEWAVE:} modelo de médio prazo que otimiza a operação hidrotérmica para um horizonte de cinco anos, determinando políticas de despacho que equilibram o uso imediato dos reservatórios e a preservação de água para períodos futuros. O NEWAVE gera como saída o CMO para cada submercado ao longo do horizonte;
@@ -44,9 +44,23 @@ A dependência hidrológica do SIN introduz uma sazonalidade pronunciada nos pre
 
 Essa dinâmica sazonal é amplificada pela correlação espacial entre bacias hidrográficas e pela variabilidade interanual associada a fenômenos climáticos como El Niño e La Niña. Para um agente comercializador, a exposição ao PLD em diferentes meses do ano apresenta, portanto, perfis de risco distintos que devem ser considerados na construção do portfólio de contratos.
 
+\subsection{Modelagem Estocástica do PLD por Modelos Autorregressivos Periódicos}
+\label{subsec:par}
+
+A caracterização estatística das séries de PLD requer um modelo que capture tanto a dependência temporal entre observações consecutivas quanto a variação sazonal na média, na variância e na estrutura de autocorrelação ao longo dos meses do ano. Os Modelos Autorregressivos Periódicos (PAR) são uma classe de modelos de séries temporais desenvolvida para essa finalidade: em vez de um único conjunto de parâmetros autorregressivos para toda a série, cada mês $m$ possui seu próprio conjunto de coeficientes, acomodando a \emph{estacionariedade periódica} observada em séries hidrológicas e de preços de energia \cite{reis2013}.
+
+Formalmente, seja $x_{t(r,m)}$ o valor observado no mês $m$ do ano $r$ e $z_{t(r,m)} = (x_{t(r,m)} - \mu_m)/\sigma_m$ a versão padronizada pela média $\mu_m$ e pelo desvio padrão $\sigma_m$ do respectivo mês. O modelo PAR de ordem $p_m$ --- denotado PAR($p_m$) --- é definido por \cite{reis2013}:
+\begin{equation}
+  z_{t(r,m)} = \sum_{j=1}^{p_m} \phi_{j,m}\, z_{t(r,m)-j} + a_{t(r,m)},
+  \label{eq:par_model}
+\end{equation}
+onde $p_m$ é a ordem do modelo para o mês $m$, $\phi_{j,m}$ são os coeficientes autorregressivos específicos do mês $m$ e $a_{t(r,m)}$ é ruído branco com variância unitária. O caso PAR(1) --- com $p_m = 1$ para todo $m$ --- introduz exatamente um coeficiente autorregressivo por mês, capturando a dependência com o período imediatamente anterior de forma parcimoniosa.
+
+O PAR foi desenvolvido no contexto da hidrologia estatística para modelar séries de vazões médias mensais, cujas propriedades estatísticas variam periodicamente com o ciclo hidrológico \cite{reis2013}. No setor elétrico brasileiro, o modelo GEVAZP --- desenvolvido pelo CEPEL (Centro de Pesquisa de Energia Elétrica, laboratório vinculado ao Sistema Eletrobrás) para geração de séries sintéticas de energia natural afluente no planejamento do SIN --- baseia-se nessa classe \cite{reis2013}. Neste trabalho, o mesmo arcabouço é empregado para séries de PLD: a geração de cenários é realizada em escala logarítmica para garantir positividade das séries sintéticas; os limites regulatórios de piso e teto são impostos por truncagem após a retransformação exponencial. Os coeficientes $\phi_{1,m}$ calibrados sobre dados históricos da CCEE (2001--2025) e a análise do procedimento de geração de cenários são apresentados no Capítulo~\ref{cap:experimentos}.
+
 \subsection{Gestão de Risco e Contratos Bilaterais}
 \label{subsec:gestao_risco}
 
 Os contratos bilaterais de compra e venda de energia são o principal instrumento de gestão da exposição ao PLD. Ao fixar volumes e preços com antecedência, um agente reduz a incerteza sobre seu resultado financeiro, ao custo de abrir mão de eventuais ganhos caso o preço \emph{spot} evolua favoravelmente. A decisão de contratar envolve, portanto, um balanço entre proteção contra risco e flexibilidade operacional \cite{bessa2006,pedrini2019}.
 
-No ACL, os contratos bilaterais são negociados diretamente entre as partes, sem intervenção da ANEEL quanto a preço ou prazo. Eles podem ser classificados quanto à fonte de energia (convencional ou incentivada) e ao produto (energia sazonalizada, flexível ou com modulação horária) \cite{ccee2024d}. Para a comercializadora, o portfólio de contratos de compra e venda determina sua posição física líquida em cada submercado e mês, e a diferença entre essa posição e a geração física própria (quando houver) resulta na exposição ao PLD que deve ser gerenciada.
+No ACL, os contratos bilaterais são negociados diretamente entre as partes, sem intervenção da ANEEL quanto a preço ou prazo \cite{ccee2024d}. Para a comercializadora, o portfólio de contratos de compra e venda determina sua posição física líquida em cada submercado e mês, e a diferença entre essa posição e a geração física própria (quando houver) resulta na exposição ao PLD que deve ser gerenciada.

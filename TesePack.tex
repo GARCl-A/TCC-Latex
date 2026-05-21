@@ -50,3 +50,7 @@
 
 \setcounter{secnumdepth}{3}   % numeração até subsubseção
 \setcounter{tocdepth}{2}      % sumário até subseção
+
+% \citeonline não é definido pelo coppe.bst (estilo numérico);
+% fallback para \cite até eventual troca de estilo bibliográfico.
+\providecommand{\citeonline}[1]{\cite{#1}}

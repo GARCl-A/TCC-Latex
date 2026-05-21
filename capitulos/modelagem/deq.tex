@@ -11,7 +11,7 @@ Para garantir que a comercializadora n\~ao utilize informa\c{c}\~ao futura em su
 \begin{equation}
   q^B_{i,m} = q^B_{i,n} \quad \text{e} \quad q^S_{i,m} = q^S_{i,n},
   \qquad \forall\, m, n \in \mathcal{N} \mid a(m) = a(n).
-  \label{eq:nao_antecipatividade}
+  \label{eq:nao_antecipatividade_deq}
 \end{equation}
 
 Os volumes respeitam os limites de lote ($0 \leq q^B_{i,n} \leq \bar{q}^B_i$) e s\~ao nulos quando o n\'o n\~ao pertence ao m\^es de in\'icio do contrato ($q^B_{i,n} = 0$, $\forall\, i \notin \mathcal{I}_n$). O racioc\'inio \'e id\^entico para $q^S_{i,n}$.
@@ -57,6 +57,8 @@ Ap\'os a realiza\c{c}\~ao das incertezas no n\'o $n$, calcula-se a exposi\c{c}\~
   \qquad \forall\, s \in \mathcal{S},\; n \in \mathcal{N} \setminus \{n_0\}.
   \label{eq:exposicao}
 \end{equation}
+
+O termo $v_{s,1,a(n)}$ representa as posi\c{c}\~oes f\'isicas herdadas do n\'o predecessor $a(n)$ com exatamente $k = 1$ m\^es remanescente de vig\^encia --- ou seja, contratos que encerram no per\'iodo corrente. Posi\c{c}\~oes com $k \geq 2$ ainda t\^em meses futuros de vig\^encia e ser\~ao incorporadas \`a exposi\c{c}\~ao dos est\'agios seguintes por meio da recurs\~ao~\eqref{eq:volume_fisico}.
 
 \subsection{Equa\c{c}\~ao de Transi\c{c}\~ao de Caixa}
 \label{subsec:transicao_caixa}
