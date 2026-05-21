@@ -6,11 +6,53 @@ A Programação Estocástica (PE) é o ramo da otimização matemática que trat
 \subsection{Formulação Multiestágio e Não Antecipatividade}
 \label{subsec:multistagio}
 
-Em muitos problemas práticos, as decisões são tomadas sequencialmente e as incertezas se revelam de forma progressiva. A Programação Estocástica Multiestágio (PEM) modela essa estrutura temporal: em cada estágio $t$, a decisão é tomada com base nas informações disponíveis até aquele momento, sem acesso a realizações futuras das variáveis aleatórias. Essa propriedade é denominada \emph{não antecipatividade} e é uma restrição fundamental da PEM \cite{shapiro2009}.
+Em muitos problemas práticos, as decisões são tomadas sequencialmente e as incertezas se revelam de forma progressiva. A Programação Estocástica Multiestágio (PEM) modela essa estrutura temporal: em cada estágio $t \in \{1,\ldots,T\}$, a decisão $x_t$ é tomada com base nas informações disponíveis até aquele momento, sem acesso a realizações futuras das variáveis aleatórias $\boldsymbol{\xi} = (\xi_1, \ldots, \xi_T)$. Essa propriedade é denominada \emph{não antecipatividade} e é uma restrição fundamental da PEM \cite{shapiro2009}.
 
-A incerteza é tipicamente representada por uma árvore de cenários, na qual cada nó corresponde a uma realização observável das variáveis aleatórias e cada ramo representa uma transição probabilística entre estágios. A formulação determinística equivalente (DEQ) constrói explicitamente essa árvore e resolve o problema resultante como um único programa linear. O tamanho do DEQ cresce exponencialmente com o número de estágios e ramificações, tornando-o inviável para instâncias com horizontes longos ou alta discretização das incertezas \cite{birge2011}.
+A não antecipatividade estabelece que decisões tomadas no estágio $t$ não podem depender de realizações de $\xi_{t'}$ para $t' > t$. Em termos da árvore de cenários, dois nós $n$ e $n'$ no mesmo estágio $t$ que compartilham o mesmo histórico de realizações até $t$ devem conduzir à mesma decisão:
+\begin{equation}
+  \xi_1^n = \xi_1^{n'}, \ldots, \xi_t^n = \xi_t^{n'} \implies x_t^n = x_t^{n'}.
+  \label{eq:nao_antecipatividade}
+\end{equation}
+
+A incerteza é tipicamente discretizada por uma árvore de cenários, na qual cada nó corresponde a uma realização observável das variáveis aleatórias e cada ramo representa uma transição probabilística entre estágios.
+
+\subsection{Equações de Bellman e Programação Dinâmica}
+\label{subsec:bellman}
+
+A estrutura sequencial da PEM permite formular o problema por meio das equações de Bellman, que decompõem a otimização em subproblemas de estágio. Definindo $V_t(s_{t-1}, \xi_t)$ como a função de custo ótimo esperado a partir do estágio $t$, dado o estado $s_{t-1}$ e a realização corrente $\xi_t$, tem-se a recursão:
+
+\begin{equation}
+  V_t(s_{t-1}, \xi_t) = \min_{x_t \,\in\, \mathcal{X}_t(s_{t-1}, \xi_t)} \left\{ c_t(x_t, \xi_t) + \mathbb{E}_{\xi_{t+1}}\!\left[V_{t+1}(s_t, \xi_{t+1})\right] \right\},
+  \label{eq:bellman}
+\end{equation}
+
+onde:
+\begin{itemize}
+  \item $s_t = f(s_{t-1}, x_t, \xi_t)$ é a equação de transição de estado;
+  \item $\mathcal{X}_t(s_{t-1}, \xi_t)$ é o conjunto viável em função do estado anterior e da realização de incerteza;
+  \item $c_t(x_t, \xi_t)$ é o custo imediato do estágio $t$;
+  \item $\mathbb{E}_{\xi_{t+1}}[V_{t+1}(\cdot)]$ é o custo futuro esperado, denominado \emph{função de custo futuro} ou \emph{função de valor}.
+\end{itemize}
+
+A condição de contorno é $V_{T+1}(\cdot) \equiv 0$. O problema de interesse é avaliar $\mathbb{E}_{\xi_1}[V_1(s_0, \xi_1)]$ a partir de um estado inicial $s_0$ conhecido \cite{shapiro2009,birge2011}.
+
+O desafio central da PEM é que $V_t(\cdot)$ não possui forma fechada em geral, sendo necessário aproximá-la ou calculá-la numericamente.
+
+\subsection{Formulação do Equivalente Determinístico}
+\label{subsec:deq_revisao}
+
+Uma abordagem direta para resolver a PEM é construir explicitamente a árvore de cenários e transformar o problema estocástico em um único programa linear de grande porte, denominado \emph{formulação determinística equivalente} (DEQ). Cada nó $n$ da árvore de cenários dá origem a um conjunto de variáveis e restrições, com a não antecipatividade~\eqref{eq:nao_antecipatividade} imposta explicitamente como igualdades entre variáveis de nós irmãos.
+
+Dados $R$ ramos por estágio e $T$ estágios, o número de nós na árvore cresce como
+\begin{equation}
+  N = \sum_{t=0}^{T} R^t = \frac{R^{T+1} - 1}{R - 1} = O(R^T),
+  \label{eq:crescimento_deq}
+\end{equation}
+tornando o DEQ inviável para instâncias com horizontes longos ou alta discretização das incertezas \cite{birge2011}. No presente trabalho, com $R = 7$ ramos por estágio e $T = 6$ meses, a árvore possui $N = 137\,257$ nós, o que ainda é tratável mas está próximo do limite prático para solução direta como LP.
 
 \subsection{Técnicas de Decomposição}
 \label{subsec:decomposicao}
 
-Para contornar a explosão combinatória da DEQ, técnicas de decomposição exploram a estrutura temporal do problema para resolvê-lo por estágios. A decomposição de Benders e suas variantes são as abordagens mais utilizadas nesse contexto \cite{shapiro2009}. A Programação Dinâmica Dual Estocástica, descrita na Seção~\ref{sec:pdde_literatura}, é a técnica de decomposição adotada neste trabalho.
+Para contornar a explosão combinatória da DEQ, técnicas de decomposição exploram a estrutura temporal do problema para resolvê-lo estágio a estágio. A decomposição de Benders e suas variantes são as abordagens mais utilizadas nesse contexto \cite{shapiro2009,birge2011}. A ideia central é representar implicitamente a função de custo futuro $\mathbb{E}[V_{t+1}(\cdot)]$ por uma aproximação construída iterativamente, evitando a enumeração explícita de todos os cenários futuros.
+
+A Programação Dinâmica Dual Estocástica, descrita na Seção~\ref{sec:pdde_literatura}, é a técnica de decomposição adotada neste trabalho como alternativa escalável à DEQ, especialmente adequada para problemas lineares com estrutura multiestágio e número elevado de estágios ou cenários.

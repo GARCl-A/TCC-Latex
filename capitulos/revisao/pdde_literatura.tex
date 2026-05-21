@@ -6,23 +6,72 @@ A Programação Dinâmica Dual Estocástica (PDDE), conhecida na literatura inte
 \subsection{Aproximação da Função de Valor por Cortes de Benders}
 \label{subsec:cortes_benders}
 
-A PDDE evita a construção explícita da árvore de cenários ao substituir a função de valor futuro $V_{t+1}(\cdot)$, desconhecida em forma fechada, por uma aproximação linear por partes $\hat{V}_{t+1}(\cdot)$ construída iterativamente. Cada iteração acrescenta um hiperplano de suporte — denominado \emph{corte de Benders} — que preserva a concavidade da aproximação e a torna progressivamente mais precisa \cite{pereira1991}.
+A PDDE evita a construção explícita da árvore de cenários ao substituir a função de custo futuro $\mathcal{Q}_{t+1}(s_t) \triangleq \mathbb{E}_{\xi_{t+1}}[V_{t+1}(s_t, \xi_{t+1})]$, desconhecida em forma fechada, por uma aproximação linear por partes $\hat{\mathcal{Q}}_{t+1}(\cdot)$ construída iterativamente. Cada iteração acrescenta um hiperplano de suporte — denominado \emph{corte de Benders} — que preserva a concavidade da aproximação e a torna progressivamente mais apertada por baixo \cite{pereira1991}.
 
-\subsection{Etapas \textit{Forward} e \textit{Backward}}
-\label{subsec:forward_backward_rev}
+Dado um estado $\bar{s}_t$ visitado durante uma iteração, o corte de Benders é gerado a partir das variáveis duais do subproblema de estágio $t+1$. Se $\pi^*$ denota o vetor de variáveis duais associadas às restrições de transição de estado avaliadas em $\bar{s}_t$, e $\theta^*$ o valor ótimo do subproblema nesse ponto, o corte acrescentado a $\hat{\mathcal{Q}}_t$ é:
+\begin{equation}
+  \hat{\mathcal{Q}}_t(s_{t-1}) \;\geq\; \theta^* + (\pi^*)^\top \bigl(s_{t-1} - \bar{s}_{t-1}\bigr).
+  \label{eq:benders_cut}
+\end{equation}
 
-A PDDE opera em iterações que alternam duas etapas:
+A acumulação de cortes ao longo das iterações garante que $\hat{\mathcal{Q}}_t \leq \mathcal{Q}_t$ (aproximação por baixo), e que o subproblema de cada estágio permanece um programa linear de tamanho fixo, independente do número de cenários \cite{pereira1991,shapiro2009}.
 
-\begin{itemize}
-  \item \textbf{Etapa \textit{forward}:} a política corrente é simulada em trajetórias de cenários. Em cada estágio, resolve-se o subproblema com a aproximação disponível de $V_{t+1}$, coletando os estados visitados e produzindo uma estimativa do valor esperado da política (limite superior estocástico).
-  \item \textbf{Etapa \textit{backward}:} os estágios são percorridos em ordem reversa. Para cada estado visitado na etapa \textit{forward}, resolve-se o subproblema e utilizam-se as soluções duais para gerar novos cortes de Benders, refinando $\hat{V}_t(\cdot)$ e elevando o limite inferior do valor ótimo.
-\end{itemize}
+\subsection{Algoritmo SDDP}
+\label{subsec:algoritmo_sddp}
 
-O algoritmo termina quando a diferença entre o limite superior e o limite inferior é inferior a uma tolerância predefinida \cite{pereira1991,shapiro2009}.
+O algoritmo SDDP opera em iterações que alternam duas etapas: \textit{forward} e \textit{backward}. O pseudocódigo é apresentado no Algoritmo~\ref{alg:sddp}.
+
+\begin{algorithm}[H]
+\caption{SDDP (\emph{Stochastic Dual Dynamic Programming})}
+\label{alg:sddp}
+\begin{algorithmic}[1]
+  \State Inicializar $\hat{\mathcal{Q}}_t(\cdot) \leftarrow -\infty$ para todo $t$ (sem cortes)
+  \Repeat
+    \State \textbf{--- Etapa \textit{Forward} ---}
+    \For{cada trajetória de simulação $k = 1, \ldots, K$}
+      \State Fixar $s_0^k \leftarrow s_0$ (estado inicial)
+      \For{$t = 1$ \textbf{até} $T$}
+        \State Amostrar realização $\xi_t^k$ segundo a distribuição de $\xi_t$
+        \State Resolver $\min_{x_t} \bigl\{ c_t(x_t, \xi_t^k) + \hat{\mathcal{Q}}_{t+1}(s_t) \bigr\}$ sujeito a $\mathcal{X}_t(s_{t-1}^k, \xi_t^k)$
+        \State Registrar solução primal $(x_t^k,\, s_t^k)$
+      \EndFor
+    \EndFor
+    \State Calcular limite superior estocástico $\bar{z} \leftarrow \frac{1}{K}\sum_k \sum_t c_t(x_t^k, \xi_t^k)$ e intervalo de confiança
+    \State \textbf{--- Etapa \textit{Backward} ---}
+    \For{$t = T$ \textbf{até} $1$}
+      \For{cada estado visitado $\bar{s}_{t-1}^k$}
+        \For{cada realização $\xi_t$ no suporte de $\xi_t$}
+          \State Resolver subproblema de estágio $t$ em $(\bar{s}_{t-1}^k, \xi_t)$ $\rightarrow$ obter $(\theta^*, \pi^*)$
+        \EndFor
+        \State Combinar soluções duais e acrescentar corte~\eqref{eq:benders_cut} a $\hat{\mathcal{Q}}_t$
+      \EndFor
+    \EndFor
+    \State Calcular limite inferior $\underline{z} \leftarrow \hat{\mathcal{Q}}_1(s_0)$
+  \Until{intervalo de confiança de $\bar{z}$ contém $\underline{z}$ com tolerância $\varepsilon$}
+\end{algorithmic}
+\end{algorithm}
+
+O critério de parada compara um limite inferior determinístico $\underline{z}$ — valor do problema com os cortes acumulados — com um limite superior estocástico $\bar{z}$ — estimado por simulação das trajetórias \emph{forward}. Quando o intervalo de confiança de $\bar{z}$ inclui $\underline{z}$, a política corrente é considerada suficientemente próxima da ótima. A convergência do algoritmo — no sentido de que os cortes acumulados aproximam a função de valor ótima à medida que o número de iterações cresce — é analisada formalmente em \citeonline{shapiro2011}.
+
+\subsection{Maldição da Dimensionalidade e Escalabilidade}
+\label{subsec:maldição}
+
+A programação dinâmica clássica sofre da \emph{maldição da dimensionalidade}: representar a função de valor $V_t(\cdot)$ em uma grade discreta do espaço de estados requer espaço exponencial na dimensão do vetor de estado $s_t$ \cite{shapiro2009}. Para estados contínuos, a discretização exata é inviável mesmo para dimensões moderadas.
+
+A PDDE supera esse problema ao representar $\hat{\mathcal{Q}}_t$ implicitamente por um conjunto de hiperplanos (os cortes de Benders), sem discretizar o espaço de estado. O tamanho de cada subproblema de estágio é independente do número de estágios $T$ e de cenários, crescendo apenas com a dimensão do vetor de estado $s_t$. Isso contrasta com o DEQ, cujo tamanho cresce exponencialmente com o horizonte conforme a equação~\eqref{eq:crescimento_deq} \cite{pereira1991}.
+
+A limitação principal da PDDE é a dependência linear em relação à dimensão do estado: problemas com muitas variáveis de estado requerem mais cortes para aproximar $\hat{\mathcal{Q}}_t$ adequadamente, aumentando o número de iterações necessárias para a convergência \cite{shapiro2009}.
 
 \subsection{Vantagens e Limitações}
 \label{subsec:vantagens_pdde}
 
-A principal vantagem computacional da PDDE é que o tamanho de cada subproblema de estágio é independente do número total de estágios e cenários, crescendo apenas com a dimensão do vetor de estado. Isso contrasta com a DEQ, cujo tamanho cresce exponencialmente com o horizonte \cite{pereira1991}. Contudo, a complexidade dos subproblemas aumenta com o número de variáveis de estado, o que pode representar uma limitação em problemas com espaços de estado de alta dimensão \cite{shapiro2009}.
+Em síntese, a PDDE apresenta as seguintes vantagens frente à DEQ:
+\begin{itemize}
+  \item O tamanho de cada subproblema de estágio é constante, independente de $T$ e do número de ramos;
+  \item A política obtida é válida para qualquer realização dos cenários, não apenas para os cenários explicitados na árvore;
+  \item A representação por cortes é naturalmente compatível com problemas lineares e convexos.
+\end{itemize}
 
-O desenvolvimento do pacote \texttt{SDDP.jl} \cite{dowson2021} facilitou a aplicação do método a novos domínios, abstraindo os detalhes de implementação dos cortes de Benders e da estrutura de grafo de política.
+Por outro lado, a PDDE requer que o problema satisfaça condições de convexidade (programas lineares ou convexos), e a convergência pode ser lenta em problemas com espaços de estado de alta dimensão \cite{shapiro2009}. Adicionalmente, o limite superior estocástico é ruidoso por natureza, requerendo um número suficiente de trajetórias de simulação para estimar com precisão.
+
+O desenvolvimento do pacote \texttt{SDDP.jl} \cite{dowson2021} facilitou a aplicação do método a novos domínios, abstraindo os detalhes de implementação dos cortes de Benders e da estrutura de grafo de política, e é utilizado neste trabalho para a implementação da abordagem SDDP.
