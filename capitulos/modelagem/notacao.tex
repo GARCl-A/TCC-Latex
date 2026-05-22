@@ -3,6 +3,35 @@
 
 Esta se\c{c}\~ao introduz a nota\c{c}\~ao utilizada na formula\c{c}\~ao do problema. A incerteza \'e representada por uma \'arvore de cen\'arios modelada como um grafo dirigido ac\'iclico $\mathcal{T} = (\mathcal{N}, \mathcal{A})$, onde $\mathcal{N}$ \'e o conjunto finito de n\'os e $\mathcal{A} \subset \mathcal{N} \times \mathcal{N}$ o conjunto de arcos que conectam cada n\'o aos seus sucessores. A \'arvore origina-se em um \'unico n\'o raiz $n_0 \in \mathcal{N}$. Cada n\'o $n \in \mathcal{N} \setminus \{n_0\}$ possui exatamente um predecessor, denotado por $a(n)$. Define-se $\mathcal{L} \subset \mathcal{N}$ como o subconjunto de n\'os folha, correspondentes ao \'ultimo est\'agio do horizonte de planejamento.
 
+\begin{table}[H]
+\centering
+\caption{Resumo dos principais s\'imbolos utilizados na formula\c{c}\~ao.}
+\label{tab:notacao}
+\small
+\begin{tabular}{lll}
+\toprule
+\textbf{S\'imbolo} & \textbf{Unidade} & \textbf{Descri\c{c}\~ao} \\
+\midrule
+$\mathcal{S}$ & --- & Conjunto de submercados \\
+$\mathcal{I}$ & --- & Conjunto de contratos dispon\'iveis \\
+$\mathcal{N}$, $\mathcal{L}$ & --- & N\'os e folhas da \'arvore de cen\'arios \\
+$P_{s,n}$ & R\$/MWh & PLD no submercado $s$, n\'o $n$ \\
+$G_{s,n}$ & MWm & Gera\c{c}\~ao f\'isica no submercado $s$, n\'o $n$ \\
+$h_n$ & h & Horas do m\^es do n\'o $n$ \\
+$D_{\max}$ & meses & Dura\c{c}\~ao m\'axima dos contratos ($= 6$ neste trabalho) \\
+$K^B_i$,\; $K^S_i$ & R\$/MWh & Pre\c{c}os de compra e venda do contrato $i$ \\
+$d_i$ & meses & Dura\c{c}\~ao do contrato $i$ \\
+$L^{\text{cred}}$ & R\$ & Limite m\'inimo de caixa ($= -10^8$) \\
+$M$ & R\$ & Penalidade \emph{big-M} ($= 10^9$) \\
+$v_{s,k,n}$ & MWm & Posi\c{c}\~ao f\'isica l\'iquida, $k$ meses remanescentes \\
+$c_{s,k,n}$ & R\$/h & Posi\c{c}\~ao financeira l\'iquida, $k$ meses remanescentes \\
+$x_n$ & R\$ & Saldo de caixa no n\'o $n$ \\
+$q^B_i$,\; $q^S_i$ & MWm & Volumes de compra e venda (decis\~ao) \\
+$\delta_n$ & R\$ & Folga da restri\c{c}\~ao de cr\'edito \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \subsection*{Conjuntos e \'Indices}
 
 \begin{itemize}
@@ -28,7 +57,7 @@ Neste trabalho, volumes de energia s\~ao expressos em \textbf{MWm\'edio} (MWm): 
   \item $L^{\text{cred}}$ (R\$): limite m\'inimo de caixa (restri\c{c}\~ao de cr\'edito).
   \item $M$: par\^ametro de penaliza\c{c}\~ao associado \`a viola\c{c}\~ao do limite de cr\'edito.
   \item $D_{\max}$: dura\c{c}\~ao m\'axima admitida nos contratos do portf\'olio (em meses).
-  \item $V^{0B}_{s,n}$, $V^{0S}_{s,n}$ (MWm): volumes de compra e venda da carteira legada no submercado $s$ e n\'o $n$.
+  \item $V^{0B}_{s,n}$, $V^{0S}_{s,n}$ (MWm): volumes de compra e venda da carteira legada no submercado $s$ e n\'o $n$. Na implementa\c{c}\~ao deste trabalho, esses volumes s\~ao constantes em $n$ --- mesma fra\c{c}\~ao da gera\c{c}\~ao m\'edia para todos os n\'os do mesmo submercado; o \'indice $n$ \'e mantido para generalidade da formula\c{c}\~ao.
   \item $K^{0B}_{s,n}$, $K^{0S}_{s,n}$ (R\$/MWh): pre\c{c}os m\'edios da carteira legada.
   \item $\bar{q}^B_i$, $\bar{q}^S_i$ (MWm): limites m\'aximos de compra e venda no contrato $i$.
   \item $K^B_i$, $K^S_i$ (R\$/MWh): pre\c{c}os fixos de compra e venda do contrato $i$.

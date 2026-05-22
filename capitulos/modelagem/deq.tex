@@ -19,7 +19,7 @@ Os volumes respeitam os limites de lote ($0 \leq q^B_{i,n} \leq \bar{q}^B_i$) e 
 \subsection{Din\^amica do Portf\'olio}
 \label{subsec:dinamica_portfolio}
 
-Contratos com dura\c{c}\~ao superior a um m\^es geram efeitos financeiros e f\'isicos ao longo de v\'arios est\'agios. O \'indice $k$ representa o n\'umero de meses remanescentes de vig\^encia de um contrato. A evolu\c{c}\~ao da posi\c{c}\~ao f\'isica l\'iquida $v_{s,k,n}$ \'e dada por:
+Contratos com dura\c{c}\~ao superior a um m\^es geram efeitos financeiros e f\'isicos ao longo de v\'arios est\'agios. O \'indice $k$ representa o n\'umero de meses remanescentes de vig\^encia de um contrato. As equa\c{c}\~oes de recurs\~ao s\~ao escritas em termos de $D_{\max}$ para generalidade; neste trabalho, $D_{\max} = 6$ meses \'e o limite pr\'atico imposto na confer\^encia de contratos. A evolu\c{c}\~ao da posi\c{c}\~ao f\'isica l\'iquida $v_{s,k,n}$ \'e dada por:
 %
 \begin{align}
   v_{s,k,n} &= v_{s,k+1,a(n)} + \sum_{\substack{i \in \mathcal{I}_n \\ d_i > k,\; s_i = s}}
@@ -75,12 +75,16 @@ O saldo de caixa $x_n$ agrega o saldo herdado do predecessor, o resultado da car
 %
 para todo $n \in \mathcal{N} \setminus \{n_0\}$.
 
+As dimens\~oes s\~ao consistentes: $q^S_{i,n} K^S_i$ tem unidade MWm~$\times$~R\$/MWh = R\$/h; multiplicado por $h_n$~h, resulta em R\$. De forma an\'aloga, $c_{s,1,a(n)}$ em R\$/h vezes $h_n$ resulta em R\$; e $E_{s,n} P_{s,n}$ em MWm~$\times$~R\$/MWh = R\$/h vezes $h_n$ resulta em R\$.
+
 A restri\c{c}\~ao de cr\'edito \'e imposta de forma el\'astica por meio de uma vari\'avel de folga $\delta_n \geq 0$, preservando a factibilidade do problema:
 %
 \begin{equation}
   x_n + \delta_n \geq L^{\text{cred}}, \qquad \forall\, n \in \mathcal{N} \setminus \{n_0\}.
   \label{eq:restricao_credito}
 \end{equation}
+%
+Neste trabalho, $L^{\text{cred}} = -10^8$~R\$ e $M = 10^9$~R\$. O valor de $M$ \'e escolhido como \emph{big-M}: suficientemente grande para que qualquer viola\c{c}\~ao do limite seja penalizada al\'em do resultado financeiro m\'aximo ating\'ivel pelo portf\'olio, sem introduzir instabilidade num\'erica.
 
 \subsection{Fun\c{c}\~ao Objetivo}
 \label{subsec:objetivo_deq}
@@ -92,5 +96,7 @@ O modelo maximiza o resultado financeiro esperado ao final do horizonte, descont
   \;-\; M \sum_{n \in \mathcal{N} \setminus \{n_0\}} \pi_n\, \delta_n.
   \label{eq:objetivo_deq}
 \end{equation}
+%
+A penalidade incide sobre todos os n\'os $n \in \mathcal{N} \setminus \{n_0\}$, e n\~ao apenas sobre as folhas, pois a restri\c{c}\~ao de cr\'edito~\eqref{eq:restricao_credito} deve ser satisfeita em todos os est\'agios do horizonte --- refletindo um requisito de solv\^encia intra-horizonte.
 
 A formula\c{c}\~ao resultante \'e um problema de programa\c{c}\~ao linear (PL) cujo porte cresce com o n\'umero de n\'os da \'arvore de cen\'arios. Para $R$ ramos por est\'agio e $T$ est\'agios, o n\'umero de n\'os \'e da ordem de $O(R^T)$, o que torna a abordagem computacionalmente invi\'avel para inst\^ancias de maior dimens\~ao, como demonstrado nos experimentos do Cap\'itulo~\ref{cap:experimentos}.

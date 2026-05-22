@@ -92,14 +92,15 @@ A din\^amica do sistema \'e descrita pela equa\c{c}\~ao de transi\c{c}\~ao de es
   \label{eq:transicao_estado}
 \end{equation}
 %
-onde $T_t(\cdot)$ agrega as equa\c{c}\~oes de atualiza\c{c}\~ao da mem\'oria f\'isica da carteira, da mem\'oria financeira dos contratos vigentes e do saldo de caixa, de forma an\'aloga \`as equa\c{c}\~oes \eqref{eq:volume_fisico}--\eqref{eq:transicao_caixa} do DEQ. O resultado econ\^omico imediato apurado no n\'o de liquida\c{c}\~ao $(t, c)$ \'e a varia\c{c}\~ao de caixa descontada da penalidade:
+onde $T_t(\cdot)$ agrega as equa\c{c}\~oes de atualiza\c{c}\~ao da mem\'oria f\'isica da carteira, da mem\'oria financeira dos contratos vigentes e do saldo de caixa, de forma an\'aloga \`as equa\c{c}\~oes \eqref{eq:volume_fisico}--\eqref{eq:transicao_caixa} do DEQ. O resultado econ\^omico imediato apurado no n\'o de liquida\c{c}\~ao $(t, c)$ \'e:
 %
 \begin{equation}
-  f_t(y_t, q_t, \omega_t) - M\,\delta_{t,\omega}
+  f_t(y_t, q_t, \omega_t)
   \;\triangleq\; (x_{t+1} - x_t) - M\,\delta_{t,\omega},
+  \label{eq:ft_def}
 \end{equation}
 %
-onde $x_{t+1}$ \'e dado pela equa\c{c}\~ao de transi\c{c}\~ao~\eqref{eq:transicao_caixa} e $\delta_{t,\omega} \geq 0$ \'e a vari\'avel de folga da restri\c{c}\~ao de cr\'edito $x_{t+1} + \delta_{t,\omega} \geq L^{\text{cred}}$.
+onde $x_{t+1}$ \'e dado pela equa\c{c}\~ao de transi\c{c}\~ao~\eqref{eq:transicao_caixa}, $\delta_{t,\omega} \geq 0$ \'e a vari\'avel de folga da restri\c{c}\~ao de cr\'edito $x_{t+1} + \delta_{t,\omega} \geq L^{\text{cred}}$, e $M = 10^9$~R\$ \'e o par\^ametro \emph{big-M} escolhido suficientemente grande para tornar qualquer viola\c{c}\~ao de $L^{\text{cred}} = -10^8$~R\$ indesej\'avel frente ao resultado financeiro t\'ipico do portf\'olio.
 
 \subsection{Fun\c{c}\~ao de Valor e Aproxima\c{c}\~ao por Cortes}
 \label{subsec:funcao_valor}
@@ -108,14 +109,14 @@ A fun\c{c}\~ao de valor \'otimo do est\'agio $t$ \'e definida recursivamente:
 %
 \begin{equation}
   V_t(y_t) = \max_{q_t \in \mathcal{Q}_t(y_t)}
-  \mathbb{E}_{\omega_t}\bigl[f_t(y_t, q_t, \omega_t) - M\,\delta_{t,\omega}
+  \mathbb{E}_{\omega_t}\bigl[f_t(y_t, q_t, \omega_t)
   + V_{t+1}(y_{t+1})\bigr],
   \label{eq:funcao_valor}
 \end{equation}
 %
-onde $\mathcal{Q}_t(y_t)$ \'e o conjunto de decis\~oes fact\'iveis. Na pr\'atica, $V_{t+1}(\cdot)$ n\~ao \'e conhecida explicitamente e \'e substitu\'ida por uma aproxima\c{c}\~ao linear por partes $\hat{V}_{t+1}(\cdot)$, constru\'ida iterativamente por cortes de Benders. Cada corte \'e um hiperplano que mant\'em o car\'ater c\^oncavo da fun\c{c}\~ao de valor.
+onde $\mathcal{Q}_t(y_t)$ \'e o conjunto de decis\~oes fact\'iveis. Na pr\'atica, $V_{t+1}(\cdot)$ n\~ao \'e conhecida explicitamente e \'e substitu\'ida por uma aproxima\c{c}\~ao linear por partes $\hat{V}_{t+1}(\cdot)$, constru\'ida iterativamente por cortes de Benders. Cada corte \'e um hiperplano que mant\'em o car\'ater c\^oncavo da fun\c{c}\~ao de valor. A soma telesc\'opica $\sum_{t=1}^{T} f_t = (x_T - x_0) - M\sum_{t=1}^{T}\delta_t$ mostra que o valor acumulado ao longo do horizonte coincide com o resultado financeiro l\'iquido de penalidades do DEQ~\eqref{eq:objetivo_deq}.
 
 \subsection{Algoritmo: Etapas \textit{Forward} e \textit{Backward}}
 \label{subsec:forward_backward}
 
-Na etapa \textit{forward}, simula-se a pol\'itica corrente sobre trajet\'orias de realiza\c{c}\~oes $\omega_t$ (PLD e gera\c{c}\~ao f\'isica), registrando os estados visitados $y_t$ e estimando o desempenho da pol\'itica (limite inferior $\underline{z}$). Na etapa \textit{backward}, resolvem-se os subproblemas nos estados visitados e extraem-se as vari\'aveis duais das restri\c{c}\~oes de transi\c{c}\~ao de estado para construir cortes que reduzem a aproxima\c{c}\~ao $\hat{V}_t(\cdot)$ em dire\c{c}\~ao ao valor \'otimo (limite superior $\bar{z}$). O processo itera at\'e $\bar{z} \approx \underline{z}$ --- na conven\c{c}\~ao de maximiza\c{c}\~ao adotada, $\bar{z}$ \'e o limite superior dado pelos cortes e $\underline{z}$ o limite inferior dado pela simula\c{c}\~ao, cf.\ Se\c{c}\~ao~\ref{subsec:algoritmo_sddp} \cite{pereira1991}. Na implementa\c{c}\~ao deste trabalho, o algoritmo executa no m\'aximo 50 itera\c{c}\~oes ou encerra antecipadamente se $\bar{z}$ n\~ao se reduz em mais de $10^{-6}$ ao longo de 100 itera\c{c}\~oes consecutivas (\texttt{BoundStalling}). A principal vantagem em rela\c{c}\~ao ao DEQ \'e que o tamanho de cada subproblema cresce apenas com a dimens\~ao do vetor de estado $y_t$, tornando a PDDE escal\'avel para horizontes longos e \'arvores de grande porte.
+Na etapa \textit{forward}, simula-se a pol\'itica corrente sobre trajet\'orias de realiza\c{c}\~oes $\omega_t$ (PLD e gera\c{c}\~ao f\'isica), registrando os estados visitados $y_t$ e estimando o desempenho da pol\'itica (limite inferior $\underline{z}$). Na etapa \textit{backward}, resolvem-se os subproblemas nos estados visitados e extraem-se as vari\'aveis duais das restri\c{c}\~oes de transi\c{c}\~ao de estado para construir cortes que reduzem a aproxima\c{c}\~ao $\hat{V}_t(\cdot)$ em dire\c{c}\~ao ao valor \'otimo (limite superior $\bar{z}$). O processo itera at\'e $\bar{z} \approx \underline{z}$ --- cf.\ Se\c{c}\~ao~\ref{subsec:cortes_benders} para a conven\c{c}\~ao de maximiza\c{c}\~ao adotada \cite{pereira1991}. Na implementa\c{c}\~ao deste trabalho, o algoritmo executa no m\'aximo 50 itera\c{c}\~oes (\texttt{iteration\_limit = 50}). A principal vantagem em rela\c{c}\~ao ao DEQ \'e que o tamanho de cada subproblema cresce apenas com a dimens\~ao do vetor de estado $y_t$, tornando a PDDE escal\'avel para horizontes longos e \'arvores de grande porte.

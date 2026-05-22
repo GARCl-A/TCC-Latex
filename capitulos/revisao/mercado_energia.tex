@@ -1,7 +1,7 @@
 \section{O Mercado de Energia Elétrica Brasileiro}
 \label{sec:mercado_energia}
 
-O setor elétrico brasileiro é caracterizado por uma matriz energética predominantemente hidrelétrica, o que o torna suscetível a variações hidrológicas \cite{mme2002}. A estrutura atual do mercado resulta de um processo de reestruturação consolidado pelo modelo institucional de 2004 \cite{lei10848}, que segmentou a cadeia elétrica em geração, transmissão, distribuição e comercialização.
+O setor elétrico brasileiro é caracterizado por uma matriz energética predominantemente hidrelétrica, o que o torna suscetível a variações hidrológicas \cite{mme2002,epe2025ben}. A estrutura atual do mercado resulta de um processo de reestruturação consolidado pelo modelo institucional de 2004 \cite{lei10848}, que segmentou a cadeia elétrica em geração, transmissão, distribuição e comercialização.
 
 \subsection{Sistema Interligado Nacional e Submercados}
 \label{subsec:sin_submercados}
@@ -30,7 +30,7 @@ O Preço de Liquidação das Diferenças (PLD) é o preço de referência para a
 
 \begin{itemize}
   \item \textbf{NEWAVE:} modelo de médio prazo que otimiza a operação hidrotérmica para um horizonte de cinco anos, determinando políticas de despacho que equilibram o uso imediato dos reservatórios e a preservação de água para períodos futuros. O NEWAVE gera como saída o CMO para cada submercado ao longo do horizonte;
-  \item \textbf{DECOMP:} modelo de curto prazo que refina o planejamento do NEWAVE para o horizonte semanal, considerando restrições operativas mais detalhadas e produzindo o CMO da semana corrente.
+  \item \textbf{DECOMP:} modelo de curto prazo que refina o planejamento do NEWAVE para o horizonte semanal, considerando restrições operativas mais detalhadas e produzindo o CMO da semana corrente. O DECOMP recebe as fun\c{c}\~oes de custo futuro geradas pelo NEWAVE como condi\c{c}\~oes de contorno de longo prazo, garantindo consist\^encia entre os dois horizontes de planejamento.
 \end{itemize}
 
 O PLD é calculado como o CMO apurado pelo DECOMP, limitado a um piso e a um teto regulatórios estabelecidos anualmente pela ANEEL \cite{ccee2024a}. Valores de CMO que excedem o teto ou ficam abaixo do piso são truncados para o limite correspondente.
@@ -49,14 +49,14 @@ Essa dinâmica sazonal é amplificada pela correlação espacial entre bacias hi
 
 A caracterização estatística das séries de PLD requer um modelo que capture tanto a dependência temporal entre observações consecutivas quanto a variação sazonal na média, na variância e na estrutura de autocorrelação ao longo dos meses do ano. Os Modelos Autorregressivos Periódicos (PAR) são uma classe de modelos de séries temporais desenvolvida para essa finalidade: em vez de um único conjunto de parâmetros autorregressivos para toda a série, cada mês $m$ possui seu próprio conjunto de coeficientes, acomodando a \emph{estacionariedade periódica} observada em séries hidrológicas e de preços de energia \cite{reis2013}.
 
-Formalmente, seja $x_{t(r,m)}$ o valor observado no mês $m$ do ano $r$ e $z_{t(r,m)} = (x_{t(r,m)} - \mu_m)/\sigma_m$ a versão padronizada pela média $\mu_m$ e pelo desvio padrão $\sigma_m$ do respectivo mês. O modelo PAR de ordem $p_m$ --- denotado PAR($p_m$) --- é definido por \cite{reis2013}:
+Formalmente, seja $x_{t(r,m)}$ o valor observado no mês $m \in \{1,\ldots,12\}$ do ano $r$ e $z_{t(r,m)} = (x_{t(r,m)} - \mu_m)/\sigma_m$ a versão padronizada pela média $\mu_m$ e pelo desvio padrão $\sigma_m$ do respectivo mês. O modelo PAR de ordem $p_m$ --- denotado PAR($p_m$) --- é definido por \cite{reis2013}:
 \begin{equation}
   z_{t(r,m)} = \sum_{j=1}^{p_m} \phi_{j,m}\, z_{t(r,m)-j} + a_{t(r,m)},
   \label{eq:par_model}
 \end{equation}
-onde $p_m$ é a ordem do modelo para o mês $m$, $\phi_{j,m}$ são os coeficientes autorregressivos específicos do mês $m$ e $a_{t(r,m)}$ é ruído branco com variância unitária. O caso PAR(1) --- com $p_m = 1$ para todo $m$ --- introduz exatamente um coeficiente autorregressivo por mês, capturando a dependência com o período imediatamente anterior de forma parcimoniosa.
+onde $p_m$ é a ordem do modelo para o mês $m$, $\phi_{j,m}$ são os coeficientes autorregressivos específicos do mês $m$ e $a_{t(r,m)}$ é ruído branco com variância unitária. Para $m = 1$ (janeiro) e $j = 1$, o \'indice $t(r,m)-j$ refere-se a dezembro do ano $r-1$; o PAR acomoda naturalmente esse cruzamento de anos. O caso PAR(1) --- com $p_m = 1$ para todo $m$ --- introduz exatamente um coeficiente autorregressivo por mês, capturando a dependência com o período imediatamente anterior de forma parcimoniosa.
 
-O PAR foi desenvolvido no contexto da hidrologia estatística para modelar séries de vazões médias mensais, cujas propriedades estatísticas variam periodicamente com o ciclo hidrológico \cite{reis2013}. No setor elétrico brasileiro, o modelo GEVAZP --- desenvolvido pelo CEPEL (Centro de Pesquisa de Energia Elétrica, laboratório vinculado ao Sistema Eletrobrás) para geração de séries sintéticas de energia natural afluente no planejamento do SIN --- baseia-se nessa classe \cite{reis2013}. Neste trabalho, o mesmo arcabouço é empregado para séries de PLD: a geração de cenários é realizada em escala logarítmica para garantir positividade das séries sintéticas; os limites regulatórios de piso e teto são impostos por truncagem após a retransformação exponencial. Os coeficientes $\phi_{1,m}$ calibrados sobre dados históricos da CCEE (2001--2025) e a análise do procedimento de geração de cenários são apresentados no Capítulo~\ref{cap:experimentos}.
+O PAR foi desenvolvido no contexto da hidrologia estatística para modelar séries de vazões médias mensais, cujas propriedades estatísticas variam periodicamente com o ciclo hidrológico \cite{reis2013}. No setor elétrico brasileiro, o modelo GEVAZP --- desenvolvido pelo CEPEL (Centro de Pesquisa de Energia Elétrica, laboratório vinculado ao Sistema Eletrobrás) para geração de séries sintéticas de energia natural afluente no planejamento do SIN --- baseia-se nessa classe \cite{reis2013}. A transforma\c{c}\~ao logar\'itmica \'e adotada por duas raz\~oes complementares: (i) imp\~oe positividade \`as s\'eries simuladas de forma natural, sem necessidade de p\'os-processamento adicional; e (ii) alinha-se \`a tradi\c{c}\~ao do GEVAZP, cujos par\^ametros s\~ao estimados sobre os logaritmos das vaz\~oes afluentes mensais. A distribui\c{c}\~ao log-normal resultante acomoda bem a assimetria positiva caracter\'istica do PLD --- picos pronunciados com piso positivo --- de forma mais parcimoniosa que modelos de cauda pesada expl\'icita. Neste trabalho, o mesmo arcabouço é empregado para séries de PLD: a geração de cenários é realizada em escala logarítmica para garantir positividade das séries sintéticas; os limites regulatórios de piso e teto são impostos por truncagem após a retransformação exponencial. Os coeficientes $\phi_{1,m}$ calibrados sobre dados históricos da CCEE (2001--2025) e a análise do procedimento de geração de cenários são apresentados no Capítulo~\ref{cap:experimentos}.
 
 \subsection{Gestão de Risco e Contratos Bilaterais}
 \label{subsec:gestao_risco}
