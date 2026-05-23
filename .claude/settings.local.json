@@ -10,7 +10,10 @@
       "Bash(pdftotext -f 1 -l 8 \"Tese_MGuerreiro_Versao final.pdf\" -)",
       "Bash(pdftotext -f 1 -l 20 \"Tese_MGuerreiro_Versao final.pdf\" -)",
       "Bash(pdftotext \"Tese_MGuerreiro_Versao final.pdf\" -)",
-      "Bash(Get-ChildItem -Recurse -Path \"c:\\\\Users\\\\lucas\\\\OneDrive\\\\Área de Trabalho\\\\Projetos\\\\TCC-Latex\\\\\" -Filter \"*.tex\" | Select-Object FullName)"
+      "Bash(Get-ChildItem -Recurse -Path \"c:\\\\Users\\\\lucas\\\\OneDrive\\\\Área de Trabalho\\\\Projetos\\\\TCC-Latex\\\\\" -Filter \"*.tex\" | Select-Object FullName)",
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\lucas\\\\OneDrive\\\\Área de Trabalho\\\\TCC-Latex\\\\Context\\\\Referências\\\\\" -File | Select-Object -ExpandProperty Name)",
+      "Bash(python -c ' *)",
+      "Bash(pdftotext -l 3 lacteccopel.pdf -)"
     ]
   }
 }

@@ -1,0 +1,12 @@
+\section{Posicionamento do Trabalho e Lacunas Identificadas}
+\label{sec:rl_posicionamento}
+
+A revisão da literatura permite identificar três lacunas que motivam e justificam o presente trabalho.
+
+A primeira diz respeito à profundidade da formulação temporal. Os trabalhos de \cite{guerreiro2017}, \cite{gunn2012} e \cite{munhoz2018} tratam o problema de forma estática, sem modelagem da interdependência entre decisões de contratação de diferentes meses. \citeonline{pedrini2019} avança para dois estágios, mas o horizonte é insuficiente para capturar a dinâmica de contratos com duração de vários meses. Na literatura revisada, não foram identificados trabalhos que combinem, em um único modelo, a formulação multiestágio de decisões mensais de contratação, a não antecipatividade explícita e restrições de fluxo de caixa ao longo de todo o horizonte de planejamento para o contexto específico da comercializadora no ACL brasileiro.
+
+A segunda lacuna diz respeito à comparação empírica entre abordagens de solução. A superioridade teórica da decomposição sobre a formulação explícita em termos de escalabilidade é bem estabelecida desde \cite{pereira1991}. Contudo, na literatura revisada sobre gestão de portfólio de contratos bilaterais no mercado brasileiro, não foram identificados trabalhos que documentem essa comparação empiricamente --- avaliando os limites concretos de cada abordagem em termos de memória consumida, tempo de processamento e qualidade da solução para instâncias de diferentes portes.
+
+A terceira lacuna diz respeito à modelagem da solvência financeira intra-horizonte. Os trabalhos revisados focam predominantemente no balanço de energia --- posição física líquida e exposição ao PLD --- sem incluir restrições explícitas de fluxo de caixa e limite de crédito que condicionem as decisões de contratação ao longo do horizonte. Para uma comercializadora sem geração própria, essa dimensão financeira é tão relevante quanto o balanço físico, pois contratos de compra exigem desembolsos futuros que podem comprometer a liquidez da empresa.
+
+O presente trabalho endereça as três lacunas ao formular o problema de gestão de portfólio da comercializadora como um programa estocástico multiestágio com restrições explícitas de fluxo de caixa, resolvido tanto por DEQ quanto por PDDE, com comparação empírica sistemática entre as duas abordagens em instâncias sintéticas parametrizadas a partir de dados históricos do SIN.

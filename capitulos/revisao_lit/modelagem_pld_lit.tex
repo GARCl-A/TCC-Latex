@@ -1,0 +1,8 @@
+\section{Modelagem Estocástica do PLD}
+\label{sec:rl_pld}
+
+A modelagem da incerteza do PLD é uma etapa necessária em qualquer abordagem de programação estocástica para o mercado brasileiro. O comportamento do PLD é determinado pelo despacho hidrotérmico do SIN, que por sua vez depende das afluências aos reservatórios --- uma variável com forte sazonalidade e dependência temporal interanual, conforme descrito na Seção~\ref{sec:mercado_energia}.
+
+\citeonline{reis2013} fornece a referência metodológica central para essa modelagem: os Modelos Autorregressivos Periódicos PAR($p$), que atribuem um conjunto distinto de parâmetros autorregressivos para cada mês do ano, capturando tanto a dependência temporal quanto a estacionariedade periódica das séries hidrológicas. O modelo GEVAZP, desenvolvido pelo CEPEL para geração de séries sintéticas de energia natural afluente no planejamento do SIN, baseia-se nessa mesma classe. \cite{detzel2011} validam um modelo AR(1) parcimonioso para geração de séries sintéticas de afluências em usinas da região sul do Brasil, confirmando a adequação de modelos autorregressivos de baixa ordem para o planejamento energético.
+
+Neste trabalho, o arcabouço PAR(1) é adotado para a geração de cenários do PLD, com estimação em escala logarítmica para garantir positividade das séries sintéticas e truncagem para imposição dos limites regulatórios de piso e teto, conforme descrito no Capítulo~\ref{cap:experimentos}.

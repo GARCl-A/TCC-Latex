@@ -76,20 +76,26 @@ main.tex
 │   │   ├── problema.tex
 │   │   ├── objetivos.tex
 │   │   └── organizacao.tex
-│   ├── revisao/
+│   ├── revisao/                  ← Cap. 2: Referencial Teórico
 │   │   ├── revisao.tex
 │   │   ├── mercado_energia.tex
 │   │   ├── prog_estocastica.tex
 │   │   ├── pdde_literatura.tex
 │   │   ├── portfolio_literatura.tex
 │   │   └── ferramentas.tex
-│   ├── modelagem/
+│   ├── revisao_lit/              ← Cap. 3: Revisão da Literatura (NOVO)
+│   │   ├── revisao_lit.tex       ← orquestrador
+│   │   ├── portfolio_contratos.tex
+│   │   ├── metodos_sddp.tex
+│   │   ├── modelagem_pld_lit.tex
+│   │   └── posicionamento.tex
+│   ├── modelagem/                ← Cap. 4: Definição Formal do Problema
 │   │   ├── modelagem.tex
 │   │   ├── descricao_problema.tex   ← ESCRITO
 │   │   ├── notacao.tex              ← ESCRITO
 │   │   ├── deq.tex                  ← ESCRITO
 │   │   └── pdde.tex                 ← ESCRITO
-│   ├── implementacao/
+│   ├── implementacao/            ← Cap. 5: Metodologia Proposta
 │   │   ├── implementacao.tex
 │   │   ├── arquitetura.tex
 │   │   ├── pipeline_dados.tex
@@ -98,13 +104,13 @@ main.tex
 │   │   ├── carteira_trades.tex
 │   │   ├── impl_deq.tex
 │   │   └── impl_sddp.tex
-│   ├── experimentos/
+│   ├── experimentos/             ← Cap. 6: Experimentos Computacionais
 │   │   ├── experimentos.tex
 │   │   ├── configuracao.tex
 │   │   ├── escalabilidade.tex
 │   │   ├── politica.tex
 │   │   └── discussao.tex
-│   └── conclusao/
+│   └── conclusao/                ← Cap. 7: Conclusões e Trabalhos Futuros
 │       └── conclusao.tex
 ├── referencias.bib
 └── CONTEXT.md                       ← este arquivo
@@ -118,38 +124,44 @@ main.tex
 1.3 Objetivos do Trabalho
 1.4 Organização do Documento
 
-**Cap. 2 — Revisão Bibliográfica**
+**Cap. 2 — Referencial Teórico**
 2.1 O Mercado de Energia Elétrica Brasileiro
 2.2 Programação Estocástica Multiestágio
 2.3 Programação Dinâmica Dual Estocástica (PDDE)
 2.4 Gestão de Portfólio de Contratos de Energia
 2.5 Ferramentas Computacionais: JuMP e SDDP.jl
 
-**Cap. 3 — Modelagem Matemática** ← CAPÍTULO COMPLETO
-3.1 Descrição do Problema
-3.2 Notação: Conjuntos, Parâmetros e Variáveis
-3.3 Formulação Determinística Equivalente (DEQ)
-3.4 Decomposição via PDDE
+**Cap. 3 — Revisão da Literatura** ← NOVO (ESCRITO)
+3.1 Otimização de Portfólio de Contratos de Energia
+3.2 Métodos de Solução para Programação Estocástica Multiestágio
+3.3 Modelagem Estocástica do PLD
+3.4 Posicionamento do Trabalho e Lacunas Identificadas
 
-**Cap. 4 — Implementação Computacional**
-4.1 Arquitetura Geral do Sistema
-4.2 Pipeline de Geração de Dados (Python)
-4.3 Geração de Cenários de PLD via PAR(1)
-4.4 Geração Estocástica de Produção Física
-4.5 Construção da Carteira e Oportunidades de Negociação
-4.6 Implementação do DEQ em JuMP
-4.7 Implementação da PDDE em SDDP.jl
+**Cap. 4 — Definição Formal do Problema** ← COMPLETO (era Cap. 3)
+4.1 Descrição do Problema
+4.2 Notação: Conjuntos, Parâmetros e Variáveis
+4.3 Formulação Determinística Equivalente (DEQ)
+4.4 Decomposição via PDDE
 
-**Cap. 5 — Experimentos Computacionais**
-5.1 Configuração Experimental
-5.2 Análise de Escalabilidade Computacional
-5.3 Análise da Política de Contratação
-5.4 Discussão dos Resultados
+**Cap. 5 — Metodologia Proposta** ← stub (era Cap. 4 "Implementação Computacional")
+5.1 Arquitetura Geral do Sistema
+5.2 Pipeline de Geração de Dados (Python)
+5.3 Geração de Cenários de PLD via PAR(1)
+5.4 Geração Estocástica de Produção Física
+5.5 Construção da Carteira e Oportunidades de Negociação
+5.6 Implementação do DEQ em JuMP
+5.7 Implementação da PDDE em SDDP.jl
 
-**Cap. 6 — Conclusão**
-6.1 Conclusões
-6.2 Limitações do Trabalho
-6.3 Trabalhos Futuros
+**Cap. 6 — Experimentos Computacionais** ← stub (era Cap. 5)
+6.1 Configuração Experimental
+6.2 Análise de Escalabilidade Computacional
+6.3 Análise da Política de Contratação
+6.4 Discussão dos Resultados
+
+**Cap. 7 — Conclusões e Trabalhos Futuros** ← stub (era Cap. 6)
+7.1 Conclusões
+7.2 Limitações do Trabalho
+7.3 Trabalhos Futuros
 
 ---
 
@@ -174,13 +186,14 @@ main.tex
 | Capítulo | Status |
 |---|---|
 | Cap. 1 — Introdução | stub (TODO) |
-| Cap. 2 — Revisão Bibliográfica | **COMPLETO** |
-| Cap. 3 — Modelagem Matemática | **COMPLETO** |
-| Cap. 4 — Implementação | stub (TODO) |
-| Cap. 5 — Experimentos | stub (TODO) |
-| Cap. 6 — Conclusão | stub (TODO) |
+| Cap. 2 — Referencial Teórico | **COMPLETO** |
+| Cap. 3 — Revisão da Literatura | **ESCRITO** |
+| Cap. 4 — Definição Formal do Problema | **COMPLETO** (era Cap. 3) |
+| Cap. 5 — Metodologia Proposta | stub (TODO) (era Cap. 4) |
+| Cap. 6 — Experimentos Computacionais | stub (TODO) (era Cap. 5) |
+| Cap. 7 — Conclusões e Trabalhos Futuros | stub (TODO) (era Cap. 6) |
 | Preambulo.tex | resumo/abstract preenchidos, dedicatória/agradecimentos TODO |
-| referencias.bib | refs do artigo + Birge2011 + Shapiro2009 |
+| referencias.bib | 9 novas refs adicionadas e verificadas contra os PDFs |
 
 ---
 
@@ -196,6 +209,19 @@ main.tex
 - `ccee2024c` — CCEE, resultados leilões MCSD
 - `birge2011` — Birge & Louveaux, Introduction to Stochastic Programming, 2011
 - `shapiro2009` — Shapiro, Dentcheva & Ruszczyński, Lectures on SP, 2009
+- `shapiro2011` — Shapiro, EJOR, 2011 (convergência PDDE)
+- `reis2013` — Reis, tese USP, 2013 (PAR(p) para vazões)
+- `pedrini2019` — Pedrini, dissertação UFSC, 2019 (dois estágios + eólica)
+- `guerreiro2017` — Ribeiro (Mário Guerreiro), dissertação FGV, 2017 (CVaR, ACL)
+- `gunn2012` — Gunn (Laura Keiko), tese doutorado UNICAMP, 2012 (portfólio energia novos empreendimentos)
+- `munhoz2018` — Munhoz (Letícia Leite), TCC UnB/FGA, 2018 (portfólio contratação ACL)
+- `josemaria2018` — Maria (Thaisy Cristina José), TCC UFJF, 2018 (contratos e riscos ACL)
+- `carvalho2021` — Carvalho (Tiago Paixão de), TCC UTFPR, 2021 (estratégias comercialização ACL)
+- `shapiro2013` — Shapiro, Tekaya, da Costa (Joari Paulo), Soares — EJOR 224 (2013) 375–391
+- `homemdemello2011` — Homem-de-Mello, de Matos, Finardi — Energy Systems 2 (2011) 1–31
+- `philpott2012` — Philpott, de Matos — EJOR 218 (2012) 470–483
+- `street2020` — Street, Valladão, Lawson, Velloso — Applied Energy 280 (2020) 115939
+- `detzel2011` — Detzel et al. (7 autores), XIX SBRH, Maceió, 2011 (geração sintética AR(1), Sul do Brasil)
 
 ---
 
