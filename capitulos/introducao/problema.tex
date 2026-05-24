@@ -1,2 +1,22 @@
-% TODO: problema
-\section{TODO}
+\section{O Problema de Gestão de Portfólio de Energia}
+\label{sec:problema}
+
+O problema de gestão de portfólio de contratos de energia surge da seguinte situação: uma empresa opera no ACL com uma carteira de geração física e um conjunto de contratos bilaterais de compra e venda a preço fixo já firmados (carteira legada). A cada mês, antes de conhecer o PLD e a produção física daquele período, a empresa decide quais novos contratos firmar --- contratos com diferentes durações, volumes e preços, indexados a cada submercado do SIN. Após as decisões de contratação, o PLD e a produção são realizados, e o resultado financeiro do período é apurado: os volumes contratados geram fluxos financeiros a preço fixo, e a diferença entre a posição física líquida (produção mais contratos de compra menos contratos de venda) e zero é liquidada ao PLD do mercado de curto prazo.
+
+Essa estrutura tem três características que definem a complexidade do problema:
+
+\begin{enumerate}
+  \item \textbf{Temporalidade das decisões:} contratos têm duração de vários meses --- tipicamente um a seis meses no ACL. Uma contratação realizada no mês $t$ compromete volumes e fluxos financeiros até o mês $t + d - 1$, onde $d$ é a duração do contrato. O estado da empresa em qualquer mês carrega, portanto, memória de todas as contratações anteriores ainda ativas.
+
+  \item \textbf{Não antecipatividade:} a decisão de contratar deve ser tomada antes da revelação do PLD e da produção do período. Dois meses com histórico idêntico até $t-1$ devem produzir a mesma decisão em $t$, independentemente do que ocorrerá em $t+1, \ldots, T$. Essa restrição é estrutural e não pode ser relaxada sem comprometer a viabilidade da política no ambiente real.
+
+  \item \textbf{Restrições de solvência:} contratos de compra exigem desembolsos futuros que podem pressionar o fluxo de caixa da empresa. A política de contratação deve manter o saldo de caixa acima de um limite mínimo em todos os meses do horizonte --- requisito de liquidez intra-horizonte que está ausente em formulações estáticas de média-variância.
+\end{enumerate}
+
+A combinação dessas três características caracteriza o problema como um programa estocástico multiestágio \cite{shapiro2009,birge2011}. Dois métodos distintos são adotados para resolvê-lo:
+
+\textbf{Formulação Determinística Equivalente (DEQ):} a árvore de cenários é construída explicitamente, com $R$ ramos por estágio e $T$ estágios, resultando em $O(R^T)$ nós. O problema estocástico é transformado em um único programa linear de grande porte, com variáveis e restrições indexadas por nó. Esse modelo é exato --- garante a solução ótima para a árvore construída --- mas o crescimento exponencial do porte o torna inviável para instâncias com horizontes longos ou alta discretização das incertezas.
+
+\textbf{Programação Dinâmica Dual Estocástica (PDDE):} em vez de construir toda a árvore, o método de \citeonline{pereira1991} decompõe o problema em subproblemas de estágio. As funções de custo futuro são aproximadas iterativamente por cortes de Benders, sem enumerar explicitamente todos os cenários futuros. O tamanho de cada subproblema é fixo e independente de $T$ e do número de cenários, conferindo ao método escalabilidade para instâncias de grande porte.
+
+A questão central que motiva este trabalho é quantificar essa diferença de escalabilidade empiricamente e avaliar se há custo de qualidade de política ao optar pela PDDE em lugar da DEQ.

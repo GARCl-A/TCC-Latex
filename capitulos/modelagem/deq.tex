@@ -63,7 +63,7 @@ O termo $v_{s,1,a(n)}$ representa as posi\c{c}\~oes f\'isicas herdadas do n\'o p
 \subsection{Equa\c{c}\~ao de Transi\c{c}\~ao de Caixa}
 \label{subsec:transicao_caixa}
 
-O saldo de caixa $x_n$ agrega o saldo herdado do predecessor, o resultado da carteira legada, o fluxo dos novos contratos, o fluxo dos contratos j\'a vigentes herdados, e a liquida\c{c}\~ao da exposi\c{c}\~ao ao PLD:
+O saldo de caixa $x_n$ agrega o saldo herdado do predecessor, o resultado da carteira legada, o fluxo dos novos contratos, o fluxo dos contratos j\'a vigentes herdados, e a liquida\c{c}\~ao da exposi\c{c}\~ao ao PLD. O termo $R^{\text{leg}}_n$ representa exclusivamente o fluxo financeiro a pre\c{c}o fixo da carteira legada ---  isto \'e, $\sum_{s} (K^{0S}_{s,n} V^{0S}_{s,n} - K^{0B}_{s,n} V^{0B}_{s,n}) h_n$ --- sem incluir a liquida\c{c}\~ao ao PLD. A exposi\c{c}\~ao ao mercado de curto prazo dos volumes legados \'e capturada integralmente pela vari\'avel $E_{s,n}$ definida em~\eqref{eq:exposicao}, que j\'a cont\'em $V^{0B}_{s,n} - V^{0S}_{s,n}$; desse modo, o resultado econ\^omico total de um contrato legado --- diferencial entre o pre\c{c}o contratado e o PLD realizado --- \'e corretamente contabilizado sem dupla contagem:
 %
 \begin{equation}
   x_n = x_{a(n)} + R^{\text{leg}}_n

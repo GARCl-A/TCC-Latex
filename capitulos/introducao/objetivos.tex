@@ -1,2 +1,18 @@
-% TODO: objetivos
-\section{TODO}
+\section{Objetivos do Trabalho}
+\label{sec:objetivos}
+
+O objetivo geral deste trabalho é comparar duas abordagens de solução para o problema de gestão de portfólio de contratos de energia sob incerteza --- a Formulação Determinística Equivalente (DEQ) e a Programação Dinâmica Dual Estocástica (PDDE) --- em termos de viabilidade computacional e qualidade da política de contratação gerada.
+
+Para atingir esse objetivo, os seguintes objetivos específicos são estabelecidos:
+
+\begin{enumerate}
+  \item \textbf{Formular o modelo multiestágio:} definir formalmente o problema de gestão de portfólio de contratos de uma empresa de comercialização de energia como um programa estocástico multiestágio, especificando conjuntos, parâmetros, variáveis de estado, variáveis de decisão, equações de transição de estado, restrições de não antecipatividade e função objetivo.
+
+  \item \textbf{Implementar as duas abordagens de solução:} desenvolver o modelo DEQ em linguagem Julia utilizando o ambiente de modelagem JuMP com o solver HiGHS; desenvolver o modelo PDDE utilizando o pacote SDDP.jl sobre a mesma infraestrutura.
+
+  \item \textbf{Construir um pipeline de dados reproduzível:} gerar cenários sintéticos de PLD e de produção física calibrados a partir de dados históricos do SIN, utilizando um modelo Autorregressivo Periódico de ordem 1 (PAR(1)) em escala logarítmica, com dados da CCEE.
+
+  \item \textbf{Comparar escalabilidade computacional:} executar experimentos com instâncias de diferentes portes --- variando o número de ramos por estágio e o horizonte de planejamento --- e registrar o tempo de processamento e o consumo de memória de cada abordagem, verificando em que ponto o DEQ se torna inviável.
+
+  \item \textbf{Comparar a qualidade da política de contratação:} nas instâncias em que ambos os métodos produzem solução, comparar as políticas obtidas em termos do resultado financeiro esperado e da estrutura das decisões de contratação no primeiro estágio.
+\end{enumerate}

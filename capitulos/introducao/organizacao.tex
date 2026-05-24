@@ -1,2 +1,16 @@
-% TODO: organizacao
-\section{TODO}
+\section{Organização do Documento}
+\label{sec:organizacao}
+
+O restante deste trabalho está organizado em seis capítulos.
+
+O \textbf{Capítulo~\ref{cap:revisao}} apresenta o referencial teórico necessário para a leitura autossuficiente do trabalho: a estrutura do mercado de energia elétrica brasileiro e o papel do PLD, os fundamentos da programação estocástica multiestágio e do método PDDE, a formulação do problema de portfólio de contratos e as ferramentas computacionais utilizadas.
+
+O \textbf{Capítulo~\ref{cap:revisao_lit}} conduz uma revisão crítica da literatura, examinando os trabalhos relacionados em três eixos: otimização de portfólio de contratos de energia no contexto brasileiro, métodos de solução para programação estocástica multiestágio aplicados a sistemas de energia, e modelagem estocástica do PLD. O capítulo conclui com o posicionamento do presente trabalho em relação às lacunas identificadas.
+
+O \textbf{Capítulo~\ref{cap:modelagem}} apresenta a formulação matemática formal do problema: a notação adotada, o modelo DEQ com toda a árvore de cenários explícita e as restrições de não antecipatividade, e a decomposição via PDDE com o grafo de política e a recursão de Bellman.
+
+O \textbf{Capítulo~\ref{cap:implementacao}} descreve a metodologia computacional: a arquitetura geral do sistema, o pipeline de geração de dados em Python (cenários de PLD via PAR(1), produção física estocástica, carteira legada e oportunidades de negociação), e as implementações do DEQ em JuMP e da PDDE em SDDP.jl.
+
+O \textbf{Capítulo~\ref{cap:experimentos}} apresenta os experimentos computacionais: a configuração experimental, a análise de escalabilidade comparando DEQ e PDDE em instâncias de diferentes portes, a análise da política de contratação gerada por cada abordagem e a discussão dos resultados.
+
+O \textbf{Capítulo~\ref{cap:conclusao}} sintetiza as conclusões do trabalho, discute as limitações da abordagem adotada e aponta direções para trabalhos futuros.
