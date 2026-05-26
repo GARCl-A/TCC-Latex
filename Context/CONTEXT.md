@@ -79,10 +79,10 @@ main.tex
 │   ├── revisao/                  ← Cap. 2: Referencial Teórico
 │   │   ├── revisao.tex
 │   │   ├── mercado_energia.tex
+│   │   ├── portfolio_literatura.tex
 │   │   ├── prog_estocastica.tex
 │   │   ├── pdde_literatura.tex
-│   │   ├── portfolio_literatura.tex
-│   │   └── ferramentas.tex
+│   │   └── ferramentas.tex       ← FORA DO \input (será reescrita no Cap. 5)
 │   ├── revisao_lit/              ← Cap. 3: Revisão da Literatura (NOVO)
 │   │   ├── revisao_lit.tex       ← orquestrador
 │   │   ├── portfolio_contratos.tex
@@ -125,11 +125,10 @@ main.tex
 1.4 Organização do Documento
 
 **Cap. 2 — Referencial Teórico**
-2.1 O Mercado de Energia Elétrica Brasileiro
-2.2 Programação Estocástica Multiestágio
-2.3 Programação Dinâmica Dual Estocástica (PDDE)
-2.4 Gestão de Portfólio de Contratos de Energia
-2.5 Ferramentas Computacionais: JuMP e SDDP.jl
+2.1 Mercado Brasileiro de Energia Elétrica
+2.2 Comercialização de Energia e Gestão de Portfólio
+2.3 Programação Estocástica Multiestágio
+2.4 Programação Dinâmica Dual Estocástica (PDDE)
 
 **Cap. 3 — Revisão da Literatura** ← NOVO (ESCRITO)
 3.1 Otimização de Portfólio de Contratos de Energia
@@ -186,7 +185,7 @@ main.tex
 | Capítulo | Status |
 |---|---|
 | Cap. 1 — Introdução | stub (TODO) |
-| Cap. 2 — Referencial Teórico | **COMPLETO** |
+| Cap. 2 — Referencial Teórico | **REVISADO** (estrutura reorganizada conforme feedback da orientadora) |
 | Cap. 3 — Revisão da Literatura | **ESCRITO** |
 | Cap. 4 — Definição Formal do Problema | **COMPLETO** (era Cap. 3) |
 | Cap. 5 — Metodologia Proposta | stub (TODO) (era Cap. 4) |
@@ -222,6 +221,15 @@ main.tex
 - `philpott2012` — Philpott, de Matos — EJOR 218 (2012) 470–483
 - `street2020` — Street, Valladão, Lawson, Velloso — Applied Energy 280 (2020) 115939
 - `detzel2011` — Detzel et al. (7 autores), XIX SBRH, Maceió, 2011 (geração sintética AR(1), Sul do Brasil)
+
+---
+
+## Estilo de escrita
+
+Regras permanentes para todo texto gerado neste TCC:
+
+- **Sem travessões (—)**: substituir por vírgula, ponto e vírgula, dois-pontos ou reescrever a frase
+- **Sem adjetivos desnecessários**: só usar adjetivo quando acrescenta informação técnica real (ex: "significativo" sozinho → remover; "O(R^T) nós" → manter)
 
 ---
 

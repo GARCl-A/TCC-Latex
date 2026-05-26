@@ -1,10 +1,7 @@
-\section{Gestão de Portfólio de Contratos de Energia}
+\section{Comercialização de Energia e Gestão de Portfólio}
 \label{sec:portfolio}
 
 A gestão de portfólio de contratos de energia consiste em determinar quais contratos bilaterais de compra e venda negociar, em que volumes e em que momento, de forma a maximizar o resultado financeiro esperado e controlar a exposição ao mercado de curto prazo. Para um comercializador no ACL, a variabilidade do PLD representa o principal fator de risco operacional, pois a diferença entre energia contratada e energia efetivamente gerada ou consumida é liquidada ao PLD.
-
-\subsection{O Comercializador de Energia como Agente de Portfólio}
-\label{subsec:comercializador}
 
 Uma comercializadora de energia atua como intermediária no ACL: compra energia de geradoras (por meio de contratos bilaterais ou no mercado de curto prazo) e a revende a consumidores livres, assumindo o risco da diferença entre o preço de aquisição e o de venda. Diferentemente de uma geradora, a comercializadora não possui ativos físicos de produção própria; seu resultado depende inteiramente da gestão do portfólio de contratos e da exposição financeira ao PLD \cite{bessa2006,guerreiro2017}.
 
@@ -17,27 +14,20 @@ A posição física do comercializador em cada submercado e período é determin
 
 Se a posição líquida for superavitária (mais compra do que venda), o excedente é liquidado ao PLD, gerando receita quando o preço está alto e custo de oportunidade quando está baixo. Se for deficitária, a diferença é comprada no mercado de curto prazo ao PLD vigente, expondo o agente ao risco de picos de preço.
 
-\subsection{Incerteza e Decisões Sequenciais}
-\label{subsec:incerteza_portfolio}
-
-A incerteza sobre o PLD e sobre a geração física torna inadequada a abordagem determinística para esse problema: um modelo que utilize valores esperados das variáveis aleatórias tende a superestimar o valor das decisões e a subestimar o risco de exposição \cite{birge2011}. Em particular, a assimetria da distribuição do PLD --- com picos pronunciados nos períodos secos --- pode levar um modelo determinístico a subestimar sistematicamente o custo esperado de uma posição deficitária.
+Essa exposição bidirecional ao PLD torna inadequada a abordagem determinística para o problema de portfólio: um modelo que utilize valores esperados das variáveis aleatórias tende a superestimar o valor das decisões e a subestimar o risco de exposição \cite{birge2011}. Em particular, a assimetria da distribuição do PLD, com picos pronunciados nos períodos secos, pode levar um modelo determinístico a subestimar sistematicamente o custo esperado de uma posição deficitária.
 
 A Programação Estocástica Multiestágio, descrita na Seção~\ref{sec:prog_estocastica}, é a abordagem adotada neste trabalho para tratar essa incerteza de forma explícita.
 
-\subsection{Estratégias de Hedge com Contratos Bilaterais}
-\label{subsec:hedge}
-
-O principal instrumento de \emph{hedge} disponível ao comercializador é o contrato bilateral a prazo, que fixa preço e volume de energia para entrega futura. Ao contratar antecipadamente um volume de compra, o agente elimina a incerteza de preço sobre esse volume --- protegendo-se contra picos de PLD ---, mas abre mão do ganho potencial caso o PLD caia abaixo do preço contratado. O nível ótimo de contratação depende, portanto, tanto das expectativas sobre o PLD quanto da aversão ao risco do agente \cite{bessa2006,pedrini2019}.
+Dentro desse contexto de incerteza, o principal instrumento de \emph{hedge} disponível ao comercializador é o contrato bilateral a prazo, que fixa preço e volume de energia para entrega futura. Ao contratar antecipadamente um volume de compra, o agente elimina a incerteza de preço sobre esse volume e se protege contra picos de PLD, mas abre mão do ganho potencial caso o PLD caia abaixo do preço contratado. O nível ótimo de contratação depende, portanto, tanto das expectativas sobre o PLD quanto da aversão ao risco do agente \cite{bessa2006,pedrini2019}.
 
 Do ponto de vista da otimização, essa decisão é naturalmente multiestágio: em cada mês, o comercializador observa o estado atual do sistema (posição de contratos em vigor, PLD corrente, posição financeira) e decide quais contratos novos celebrar ou renovar para os meses seguintes. As decisões correntes afetam as opções disponíveis nos estágios futuros, caracterizando a interdependência temporal que motiva o uso de programação estocástica multiestágio \cite{guerreiro2017}.
 
-\subsection{Restrições Financeiras e Balanço de Energia}
-\label{subsec:restricoes_portfolio}
-
-Além do balanço físico entre contratos, geração e consumo, o problema de portfólio deve incluir restrições de fluxo de caixa e limites de crédito, que condicionam as decisões de contratação em cada estágio. Contratos de compra exigem desembolso financeiro futuro, enquanto contratos de venda geram receitas comprometidas; o saldo de caixa resultante deve satisfazer restrições de liquidez ao longo de todo o horizonte \cite{bessa2006}.
+Além do balanço físico entre contratos, geração e consumo descrito acima, o problema de portfólio deve incluir restrições de fluxo de caixa e limites de crédito, que condicionam as decisões de contratação em cada estágio. Contratos de compra exigem desembolso financeiro futuro, enquanto contratos de venda geram receitas comprometidas; o saldo de caixa resultante deve satisfazer restrições de liquidez ao longo de todo o horizonte \cite{bessa2006}.
 
 A interdependência entre as decisões correntes e os compromissos financeiros futuros torna o problema inerentemente multiestágio: uma contratação realizada no mês $t$ modifica o espaço viável dos meses $t+1, \ldots, T$, ao comprometer recursos financeiros e alterar a posição física do portfólio.
 
-A aplicação de métodos de otimização estocástica ao planejamento integrado de comercialização de energia é discutida em \citeonline{bessa2006}, que descreve um sistema de apoio à decisão para comercializadoras no mercado brasileiro. \citeonline{guerreiro2017} aborda especificamente o problema de otimização de portfólio no ACL, enquanto \citeonline{pedrini2019} estende a formulação para consumidores livres com a possibilidade de contratar geração eólica.
+Essa interdependência temporal tem motivado o desenvolvimento de modelos de otimização específicos para a comercialização de energia. \citeonline{bessa2006} descrevem um sistema de apoio à decisão para comercializadoras no mercado brasileiro. \citeonline{guerreiro2017} aborda especificamente o problema de otimização de portfólio no ACL, enquanto \citeonline{pedrini2019} estende a formulação para consumidores livres com a possibilidade de contratar geração eólica.
 
-Quando os contratos bilaterais têm duração superior a um mês --- o que é usual no ACL, onde contratos anuais ou plurianuais são comuns --- a posição contratual do comercializador em cada mês carrega memória dos contratos firmados em períodos anteriores, ampliando o vetor de estado do problema de otimização conforme formalizado na Seção~\ref{sec:notacao} \cite{bessa2006,guerreiro2017}.
+Um aspecto adicional que amplia a complexidade do problema é a duração dos contratos: no ACL, onde contratos anuais ou plurianuais são comuns, os contratos bilaterais têm duração superior a um mês, e a posição contratual do comercializador em cada mês carrega memória dos contratos firmados em períodos anteriores, ampliando o vetor de estado do problema de otimização conforme formalizado na Seção~\ref{sec:notacao} \cite{bessa2006,guerreiro2017}.
+
+O problema central deste trabalho é, portanto, a construção de uma política de contratação que equilibre retorno esperado e controle de risco ao longo de um horizonte de meses, diante da incerteza do PLD. Essa estrutura de decisão sequencial sob incerteza é formalizada pela programação estocástica multiestágio, apresentada na Seção~\ref{sec:prog_estocastica}.
